@@ -132,7 +132,7 @@ class _GroceriesListOverview extends State<GroceriesListOverview> {
     );
   }
 
-  Widget toList(GroceriesList list) {
+  Card toList(GroceriesList list) {
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(1),
