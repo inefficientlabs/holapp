@@ -99,7 +99,7 @@ class _GroceriesListOverview extends State<GroceriesListOverview> {
             child: ListView.separated(
               padding: const EdgeInsets.all(8),
               itemCount: filteredGroceries.length,
-              itemBuilder: (context, index) => toList(filteredGroceries[index]),
+              itemBuilder: (context, index) => toCard(filteredGroceries[index]),
               separatorBuilder: (context, index) => const SizedBox(height: 8),
             ),
           ),
@@ -132,7 +132,7 @@ class _GroceriesListOverview extends State<GroceriesListOverview> {
     );
   }
 
-  Card toList(GroceriesList list) {
+  Card toCard(GroceriesList list) {
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(1),
