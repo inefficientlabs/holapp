@@ -11,6 +11,9 @@ class GroceriesListOverview extends StatefulWidget {
 class _GroceriesListOverview extends State<GroceriesListOverview> {
   List<GroceriesList> groceriesLists = [];
   List<GroceriesList> filteredGroceries = [];
+  CheckboxState _checkboxState = CheckboxState.checked;
+
+  String? listType;
 
   final TextEditingController searchController = TextEditingController();
 
@@ -37,18 +40,67 @@ class _GroceriesListOverview extends State<GroceriesListOverview> {
     });
   }
 
-  void create(String name) {
+  void createNewList() {
+    String name = searchController.text;
+
     if (name.isNotEmpty) {
+      GroceriesList newList = switch (_checkboxState) {
+        CheckboxState.checked => PersistentGroceriesList(
+          name: name,
+          date: DateTime.now(),
+          groceries: [],
+          history: [],
+        ),
+
+        _ => GroceriesList.init(name: name),
+      };
+
       setState(() {
-        groceriesLists.add(GroceriesList.init(name: name));
+        groceriesLists.add(newList);
         filteredGroceries = groceriesLists;
         searchController.clear();
       });
     }
   }
 
-  void createNewList() {
-    create(searchController.text);
+  void addNewList() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        String? listType;
+
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              title: Text(searchController.text),
+              content: Checkbox(
+                state: _checkboxState,
+                onChanged: (value) {
+                  setState(() {
+                    _checkboxState = value;
+                  });
+                },
+                // Optional label placed on the trailing side.
+                trailing: const Text('should be persistent'),
+              ),
+              actions: [
+                OutlineButton(
+                  child: const Text('CANCEL'),
+                  onPressed: () => Navigator.pop(context),
+                ),
+                DestructiveButton(
+                  child: const Text('CREATE'),
+                  onPressed: () => {
+                    createNewList(),
+                    Navigator.pop(context, listType),
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
   }
 
   void removeFromList(GroceriesList list) {
@@ -115,13 +167,17 @@ class _GroceriesListOverview extends State<GroceriesListOverview> {
                     ),
                     controller: searchController,
                     onChanged: filterGroceries,
-                    onSubmitted: (value) => create(value),
+                    onSubmitted: (value) => createNewList(),
                   ),
                 ),
                 SizedBox(width: 8),
                 PrimaryButton(
-                  onPressed: (searchController.text.isNotEmpty
-                      ? createNewList
+                  onPressed:
+                      (searchController.text.isNotEmpty &&
+                          groceriesLists.every(
+                            (list) => list.name != searchController.text,
+                          )
+                      ? addNewList
                       : null),
                   child: Icon(Icons.add),
                 ),
@@ -135,22 +191,21 @@ class _GroceriesListOverview extends State<GroceriesListOverview> {
 
   Card toCard(GroceriesList list) {
     return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(1),
-        child: Row(
-          children: [
-            Expanded(
-              child: Text(
-                list.name,
-                style: const TextStyle(fontSize: 18),
-              ).semiBold(),
-            ),
-            GhostButton(
-              onPressed: () => removeFromList(list),
-              child: const Icon(Icons.remove_circle_outline),
-            ),
-          ],
-        ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(
+              list.name,
+              style: const TextStyle(fontSize: 18),
+            ).semiBold(),
+          ),
+          if ((list is! PersistentGroceriesList))
+            Icon(BootstrapIcons.databaseFillX),
+          GhostButton(
+            onPressed: () => removeFromList(list),
+            child: const Icon(RadixIcons.minusCircled),
+          ),
+        ],
       ),
     );
   }
