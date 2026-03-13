@@ -23,6 +23,8 @@ class _GroceriesListOverview extends State<GroceriesListOverview> {
       GroceriesList.init(name: "Lidl"),
       GroceriesList.init(name: "Aldi"),
     ];
+    groceriesLists.sort((a, b) => a.date.compareTo(b.date));
+
     filteredGroceries = List.from(groceriesLists);
   }
 
