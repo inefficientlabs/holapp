@@ -11,7 +11,6 @@ class GroceriesListOverview extends StatefulWidget {
 class _GroceriesListOverview extends State<GroceriesListOverview> {
   List<GroceriesList> groceriesLists = [];
   List<GroceriesList> filteredGroceries = [];
-  String newName = "";
 
   final TextEditingController searchController = TextEditingController();
 
@@ -33,7 +32,6 @@ class _GroceriesListOverview extends State<GroceriesListOverview> {
         .toList();
     setState(() {
       filteredGroceries = filtered;
-      newName = query;
     });
   }
 
@@ -43,13 +41,12 @@ class _GroceriesListOverview extends State<GroceriesListOverview> {
         groceriesLists.add(GroceriesList.init(name: name));
         filteredGroceries = groceriesLists;
         searchController.clear();
-        newName = "";
       });
     }
   }
 
   void createNewList() {
-    create(newName);
+    create(searchController.text);
   }
 
   void removeFromList(GroceriesList list) {
@@ -121,7 +118,9 @@ class _GroceriesListOverview extends State<GroceriesListOverview> {
                 ),
                 SizedBox(width: 8),
                 PrimaryButton(
-                  onPressed: (newName.isNotEmpty ? createNewList : null),
+                  onPressed: (searchController.text.isNotEmpty
+                      ? createNewList
+                      : null),
                   child: Icon(Icons.add),
                 ),
               ],
