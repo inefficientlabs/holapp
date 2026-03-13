@@ -1,4 +1,4 @@
-import 'package:holapp/model/groceries/groceries_list.dart';
+import 'package:holapp/model/groceries/list/groceries_list.dart';
 import 'package:shadcn_flutter/shadcn_flutter.dart';
 
 class GroceriesListOverview extends StatefulWidget {
@@ -11,7 +11,7 @@ class GroceriesListOverview extends StatefulWidget {
 class _GroceriesListOverview extends State<GroceriesListOverview> {
   List<GroceriesList> groceriesLists = [];
   List<GroceriesList> filteredGroceries = [];
-  CheckboxState _checkboxState = CheckboxState.checked;
+  CheckboxState _checkboxState = CheckboxState.unchecked;
 
   String? listType;
 
@@ -21,10 +21,10 @@ class _GroceriesListOverview extends State<GroceriesListOverview> {
   void initState() {
     super.initState();
     groceriesLists = [
-      GroceriesList.init(name: "Rewe"),
-      GroceriesList.init(name: "Edeka"),
-      GroceriesList.init(name: "Lidl"),
-      GroceriesList.init(name: "Aldi"),
+      PersistentGroceriesList.init(name: "Rewe"),
+      OneWayGroceriesList.init(name: "Edeka"),
+      PersistentGroceriesList.init(name: "Lidl"),
+      OneWayGroceriesList.init(name: "Aldi"),
     ];
     groceriesLists.sort((a, b) => a.date.compareTo(b.date));
 
@@ -45,14 +45,9 @@ class _GroceriesListOverview extends State<GroceriesListOverview> {
 
     if (name.isNotEmpty) {
       GroceriesList newList = switch (_checkboxState) {
-        CheckboxState.checked => PersistentGroceriesList(
-          name: name,
-          date: DateTime.now(),
-          groceries: [],
-          history: [],
-        ),
+        CheckboxState.checked => OneWayGroceriesList.init(name: name),
 
-        _ => GroceriesList.init(name: name),
+        _ => PersistentGroceriesList.init(name: name),
       };
 
       setState(() {
@@ -73,15 +68,17 @@ class _GroceriesListOverview extends State<GroceriesListOverview> {
           builder: (context, setState) {
             return AlertDialog(
               title: Text(searchController.text),
-              content: Checkbox(
-                state: _checkboxState,
-                onChanged: (value) {
-                  setState(() {
-                    _checkboxState = value;
-                  });
-                },
-                // Optional label placed on the trailing side.
-                trailing: const Text('should be persistent'),
+              content: Center(
+                child: Checkbox(
+                  state: _checkboxState,
+                  onChanged: (value) {
+                    setState(() {
+                      _checkboxState = value;
+                    });
+                  },
+                  // Optional label placed on the trailing side.
+                  trailing: const Text('one-way'),
+                ),
               ),
               actions: [
                 OutlineButton(
@@ -199,8 +196,10 @@ class _GroceriesListOverview extends State<GroceriesListOverview> {
               style: const TextStyle(fontSize: 18),
             ).semiBold(),
           ),
-          if ((list is! PersistentGroceriesList))
-            Icon(BootstrapIcons.databaseFillX),
+          switch (list) {
+            OneWayGroceriesList() => Icon(BootstrapIcons.databaseDown),
+            PersistentGroceriesList() => Icon(BootstrapIcons.databaseCheck),
+          },
           GhostButton(
             onPressed: () => removeFromList(list),
             child: const Icon(RadixIcons.minusCircled),
