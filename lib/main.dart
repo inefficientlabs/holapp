@@ -1,4 +1,5 @@
-import 'package:holapp/page/overview/groceries_list_overview.dart';
+import 'package:holapp/model/groceries/list/groceries_list.dart';
+import 'package:holapp/page/groceries/overview/groceries_lists_overview.dart';
 import 'package:shadcn_flutter/shadcn_flutter.dart';
 
 void main() {
@@ -10,6 +11,8 @@ class HolApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ShadcnApp(title: 'hol', home: GroceriesListOverview());
+    GroceriesList.provideFactoryRegistry();
+
+    return ShadcnApp(title: 'hol', home: GroceriesListsOverview());
   }
 }
