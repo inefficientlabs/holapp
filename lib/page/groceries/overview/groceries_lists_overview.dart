@@ -42,58 +42,49 @@ class GroceriesListsOverview extends StatelessWidget {
             ),
           }.toList()..sort((a, b) => state.sort.compare(a, b));
 
-          return Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Select<GroceriesListSortableProperty>(
-                        itemBuilder: (context, item) =>
-                            Text(item.displayName()),
-                        onChanged: (value) {
-                          if (value != null) {
-                            bloc.add(SortablePropertyChangedEvent(prop: value));
-                          }
-                        },
-                        value: state.prop,
-                        placeholder: const Text('Select a property'),
-                        popup: SelectPopup(
-                          items: SelectItemList(
-                            children: GroceriesListSortableProperty.values
-                                .map(
-                                  (type) => SelectItemButton(
-                                    value: type,
-                                    child: Text(type.displayName()),
-                                  ),
-                                )
-                                .toList(),
-                          ),
-                        ).call,
-                      ),
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: [
+                SizedBox(height: 0),
+                Expanded(
+                  child: ListView.separated(
+                    itemCount: filtered.length,
+                    itemBuilder: (context, index) => GestureDetector(
+                      onTap: () {
+                        _debouncer.debounce(
+                          duration: Duration(milliseconds: 234),
+                          onDebounce: () {
+                            openList(filtered[index]);
+                          },
+                        );
+                      },
+                      child: toCard(filtered[index]),
                     ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: Select<SortDirection>(
-                        itemBuilder: (context, item) =>
-                            Text(item.displayName()),
-                        onChanged: (direction) {
-                          if (direction != null) {
-                            bloc.add(
-                              SortDirectionChangedEvent(direction: direction),
-                            );
-                          }
-                        },
-                        value: state.sort.direction,
-                        placeholder: const Text('Select a direction'),
-                        popup: SelectPopup(
-                          items: SelectItemList(
-                            children:
-                                [
-                                      SortDirection.ascending,
-                                      SortDirection.descending,
-                                    ]
+                    separatorBuilder: (context, index) =>
+                        const SizedBox(height: 8),
+                  ),
+                ),
+                Column(
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Select<GroceriesListSortableProperty>(
+                            itemBuilder: (context, item) =>
+                                Text(item.displayName()),
+                            onChanged: (value) {
+                              if (value != null) {
+                                bloc.add(
+                                  SortablePropertyChangedEvent(prop: value),
+                                );
+                              }
+                            },
+                            value: state.prop,
+                            placeholder: const Text('Select a property'),
+                            popup: SelectPopup(
+                              items: SelectItemList(
+                                children: GroceriesListSortableProperty.values
                                     .map(
                                       (type) => SelectItemButton(
                                         value: type,
@@ -101,171 +92,189 @@ class GroceriesListsOverview extends StatelessWidget {
                                       ),
                                     )
                                     .toList(),
-                          ),
-                        ).call,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: 0),
-              Expanded(
-                child: ListView.separated(
-                  padding: const EdgeInsets.all(8),
-                  itemCount: filtered.length,
-                  itemBuilder: (context, index) => GestureDetector(
-                    onTap: () {
-                      _debouncer.debounce(
-                        duration: Duration(milliseconds: 234),
-                        onDebounce: () {
-                          openList(filtered[index]);
-                        },
-                      );
-                    },
-                    child: toCard(filtered[index]),
-                  ),
-                  separatorBuilder: (context, index) =>
-                      const SizedBox(height: 8),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 8,
-                ),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: TextField(
-                        controller: searchController,
-                        placeholder: const Text('Search'),
-                        style: const TextStyle(fontSize: 18),
-                        features: [
-                          if (state.filter?.str.isNotEmpty ?? false)
-                            InputFeature.clear(
-                              skipFocusTraversal: false,
-                              icon: GestureDetector(
-                                child: Icon(Icons.clear),
-                                onTapUp: (details) {
-                                  _debouncer.debounce(
-                                    duration: Duration(milliseconds: 100),
-                                    onDebounce: () {
-                                      searchController.clear();
-                                      bloc.add(FilterChangedEvent(filter: ""));
-                                    },
-                                  );
-                                },
                               ),
-                            ),
-                        ],
-                        onChanged: (value) {
-                          print(value);
-                          _debouncer.debounce(
-                            duration: Duration(milliseconds: 234),
-                            onDebounce: () {
-                              print("MOIN");
-                              bloc.add(FilterChangedEvent(filter: value));
+                            ).call,
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Select<SortDirection>(
+                            itemBuilder: (context, item) =>
+                                Text(item.displayName()),
+                            onChanged: (direction) {
+                              if (direction != null) {
+                                bloc.add(
+                                  SortDirectionChangedEvent(
+                                    direction: direction,
+                                  ),
+                                );
+                              }
                             },
-                          );
-                        },
-                      ),
+                            value: state.sort.direction,
+                            placeholder: const Text('Select a direction'),
+                            popup: SelectPopup(
+                              items: SelectItemList(
+                                children:
+                                    [
+                                          SortDirection.ascending,
+                                          SortDirection.descending,
+                                        ]
+                                        .map(
+                                          (type) => SelectItemButton(
+                                            value: type,
+                                            child: Text(type.displayName()),
+                                          ),
+                                        )
+                                        .toList(),
+                              ),
+                            ).call,
+                          ),
+                        ),
+                      ],
                     ),
-                    SizedBox(width: 8),
-                    PrimaryButton(
-                      onPressed:
-                          (filtered.isEmpty &&
-                              (searchController.text.isNotEmpty))
-                          ? () {
-                              showDialog(
-                                context: context,
-                                builder: (dialogContext) {
-                                  return AlertDialog(
-                                    title: Text(
-                                      'Create ${searchController.text}',
-                                    ),
-                                    content: Builder(
-                                      builder: (innerContext) {
-                                        return BlocBuilder<
-                                          ListsBloc,
-                                          ListsState
-                                        >(
-                                          bloc: bloc,
-                                          builder: (context, listsState) {
-                                            return SizedBox(
-                                              width: 240,
-                                              child: Select<Type>(
-                                                // How to render each selected item as text in the field.
-                                                itemBuilder: (context, item) {
-                                                  return Text(item.toString());
-                                                },
-                                                // Limit the popup size so it doesn't grow too large in the docs view.
-                                                popupConstraints:
-                                                    const BoxConstraints(
-                                                      maxHeight: 300,
-                                                      maxWidth: 200,
-                                                    ),
-                                                onChanged: (value) {
-                                                  if (value != null) {
-                                                    bloc.add(
-                                                      ListTypeSelectionChanged(
-                                                        selectedListType: value,
-                                                      ),
-                                                    );
-                                                  }
-                                                },
-                                                // The current selection bound to this field.
-                                                value:
-                                                    bloc.state.selectedListType,
-                                                placeholder: const Text(
-                                                  'Select a type',
-                                                ),
-                                                popup: SelectPopup(
-                                                  items: SelectItemList(
-                                                    children: GroceriesList
-                                                        .types
-                                                        .map(
-                                                          (
-                                                            type,
-                                                          ) => SelectItemButton(
-                                                            value: type,
-                                                            child: Text(
-                                                              type.toString(),
-                                                            ),
-                                                          ),
-                                                        )
-                                                        .toList(),
-                                                  ),
-                                                ).call,
-                                              ),
-                                            );
-                                          },
-                                        );
-                                      },
-                                    ),
-                                    actions: [
-                                      PrimaryButton(
-                                        onPressed: () {
+                    SizedBox(height: 4),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: TextField(
+                            controller: searchController,
+                            placeholder: const Text('Search'),
+                            style: const TextStyle(fontSize: 18),
+                            features: [
+                              if (state.filter?.str.isNotEmpty ?? false)
+                                InputFeature.clear(
+                                  skipFocusTraversal: false,
+                                  icon: GestureDetector(
+                                    child: Icon(Icons.clear),
+                                    onTapUp: (details) {
+                                      _debouncer.debounce(
+                                        duration: Duration(milliseconds: 100),
+                                        onDebounce: () {
+                                          searchController.clear();
                                           bloc.add(
-                                            CreateListEvent(
-                                              name: searchController.text,
-                                            ),
+                                            FilterChangedEvent(filter: ""),
                                           );
-                                          Navigator.pop(dialogContext);
                                         },
-                                        child: Text("CREATE"),
-                                      ),
-                                    ],
-                                  );
+                                      );
+                                    },
+                                  ),
+                                ),
+                            ],
+                            onChanged: (value) {
+                              print(value);
+                              _debouncer.debounce(
+                                duration: Duration(milliseconds: 234),
+                                onDebounce: () {
+                                  print("MOIN");
+                                  bloc.add(FilterChangedEvent(filter: value));
                                 },
                               );
-                            }
-                          : null,
-                      child: const Icon(Icons.add, size: 24),
+                            },
+                          ),
+                        ),
+                        SizedBox(width: 8),
+                        PrimaryButton(
+                          onPressed:
+                              (filtered.isEmpty &&
+                                  (searchController.text.isNotEmpty))
+                              ? () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (dialogContext) {
+                                      return AlertDialog(
+                                        title: Text(
+                                          'Create ${searchController.text}',
+                                        ),
+                                        content: Builder(
+                                          builder: (innerContext) {
+                                            return BlocBuilder<
+                                              ListsBloc,
+                                              ListsState
+                                            >(
+                                              bloc: bloc,
+                                              builder: (context, listsState) {
+                                                return SizedBox(
+                                                  width: 240,
+                                                  child: Select<Type>(
+                                                    // How to render each selected item as text in the field.
+                                                    itemBuilder:
+                                                        (context, item) {
+                                                          return Text(
+                                                            item.toString(),
+                                                          );
+                                                        },
+                                                    // Limit the popup size so it doesn't grow too large in the docs view.
+                                                    popupConstraints:
+                                                        const BoxConstraints(
+                                                          maxHeight: 300,
+                                                          maxWidth: 200,
+                                                        ),
+                                                    onChanged: (value) {
+                                                      if (value != null) {
+                                                        bloc.add(
+                                                          ListTypeSelectionChanged(
+                                                            selectedListType:
+                                                                value,
+                                                          ),
+                                                        );
+                                                      }
+                                                    },
+                                                    // The current selection bound to this field.
+                                                    value: bloc
+                                                        .state
+                                                        .selectedListType,
+                                                    placeholder: const Text(
+                                                      'Select a type',
+                                                    ),
+                                                    popup: SelectPopup(
+                                                      items: SelectItemList(
+                                                        children: GroceriesList
+                                                            .types
+                                                            .map(
+                                                              (
+                                                                type,
+                                                              ) => SelectItemButton(
+                                                                value: type,
+                                                                child: Text(
+                                                                  type.toString(),
+                                                                ),
+                                                              ),
+                                                            )
+                                                            .toList(),
+                                                      ),
+                                                    ).call,
+                                                  ),
+                                                );
+                                              },
+                                            );
+                                          },
+                                        ),
+                                        actions: [
+                                          PrimaryButton(
+                                            onPressed: () {
+                                              bloc.add(
+                                                CreateListEvent(
+                                                  name: searchController.text,
+                                                ),
+                                              );
+                                              Navigator.pop(dialogContext);
+                                            },
+                                            child: Text("CREATE"),
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                }
+                              : null,
+                          child: const Icon(Icons.add, size: 24),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-              ),
-            ],
+              ],
+            ),
           );
         },
       ),
