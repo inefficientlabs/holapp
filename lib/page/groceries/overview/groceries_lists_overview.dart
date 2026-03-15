@@ -1,10 +1,11 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_debouncer/flutter_debouncer.dart';
-import 'package:holapp/model/common/filter.dart';
 import 'package:holapp/model/groceries/list/groceries_list.dart';
 import 'package:holapp/page/groceries/overview/bloc/lists_bloc.dart';
 import 'package:holapp/page/groceries/overview/bloc/lists_event.dart';
 import 'package:holapp/page/groceries/overview/bloc/lists_state.dart';
+import 'package:holapp/util/filter.dart';
+import 'package:holapp/util/sort.dart';
 import 'package:shadcn_flutter/shadcn_flutter.dart';
 
 class GroceriesListsOverview extends StatelessWidget {
@@ -39,14 +40,80 @@ class GroceriesListsOverview extends StatelessWidget {
             Filter filter => state.lists.where(
               (it) => it.name.toLowerCase().contains(filter.str.toLowerCase()),
             ),
-          }.toList();
+          }.toList()..sort((a, b) => state.sort.compare(a, b));
 
           return Column(
             children: [
-              const Divider(),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Select<GroceriesListSortableProperty>(
+                        itemBuilder: (context, item) =>
+                            Text(item.displayName()),
+                        onChanged: (value) {
+                          if (value != null) {
+                            listsBloc.add(
+                              SortablePropertyChangedEvent(prop: value),
+                            );
+                          }
+                        },
+                        value: state.prop,
+                        placeholder: const Text('Select a property'),
+                        popup: SelectPopup(
+                          items: SelectItemList(
+                            children: GroceriesListSortableProperty.values
+                                .map(
+                                  (type) => SelectItemButton(
+                                    value: type,
+                                    child: Text(type.displayName()),
+                                  ),
+                                )
+                                .toList(),
+                          ),
+                        ).call,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Select<SortDirection>(
+                        itemBuilder: (context, item) =>
+                            Text(item.displayName()),
+                        onChanged: (direction) {
+                          if (direction != null) {
+                            listsBloc.add(
+                              SortDirectionChangedEvent(direction: direction),
+                            );
+                          }
+                        },
+                        value: state.sort.direction,
+                        placeholder: const Text('Select a direction'),
+                        popup: SelectPopup(
+                          items: SelectItemList(
+                            children:
+                                [
+                                      SortDirection.ascending,
+                                      SortDirection.descending,
+                                    ]
+                                    .map(
+                                      (type) => SelectItemButton(
+                                        value: type,
+                                        child: Text(type.displayName()),
+                                      ),
+                                    )
+                                    .toList(),
+                          ),
+                        ).call,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 0),
               Expanded(
                 child: ListView.separated(
-                  padding: const EdgeInsets.all(16),
+                  padding: const EdgeInsets.all(8),
                   itemCount: filtered.length,
                   itemBuilder: (context, index) => GestureDetector(
                     onTap: () {

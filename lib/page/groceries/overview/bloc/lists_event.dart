@@ -1,4 +1,5 @@
 import 'package:holapp/model/groceries/list/groceries_list.dart';
+import 'package:shadcn_flutter/shadcn_flutter_experimental.dart';
 
 sealed class ListsEvent {}
 
@@ -8,6 +9,18 @@ class FilterChangedEvent extends ListsEvent {
   String filter;
 
   FilterChangedEvent({required this.filter});
+}
+
+class SortablePropertyChangedEvent extends ListsEvent {
+  GroceriesListSortableProperty prop;
+
+  SortablePropertyChangedEvent({required this.prop});
+}
+
+class SortDirectionChangedEvent extends ListsEvent {
+  SortDirection direction;
+
+  SortDirectionChangedEvent({required this.direction});
 }
 
 class DeleteListEvent extends ListsEvent {

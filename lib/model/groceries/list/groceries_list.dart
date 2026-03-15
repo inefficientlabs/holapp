@@ -29,6 +29,16 @@ sealed class GroceriesList {
   }
 }
 
+enum GroceriesListSortableProperty { name, length, date }
+
+extension GroceriesListSortablePropertyExt on GroceriesListSortableProperty {
+  String displayName() => switch (this) {
+    GroceriesListSortableProperty.name => "name",
+    GroceriesListSortableProperty.length => "length",
+    GroceriesListSortableProperty.date => "date",
+  };
+}
+
 class DisposableGroceriesList extends GroceriesList {
   @override
   DateTime date = DateTime.now();

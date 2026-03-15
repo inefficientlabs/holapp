@@ -6,4 +6,8 @@ class GroceriesItem<T> {
   T amount;
 
   GroceriesItem(this.name, this.unit, this.amount);
+
+  factory GroceriesItem.onePiece(String name) {
+    return GroceriesItem(name, Unit.piece, 1 as T);
+  }
 }
