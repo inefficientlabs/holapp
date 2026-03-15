@@ -4,10 +4,10 @@ sealed class ListsEvent {}
 
 class FetchListsEvent extends ListsEvent {}
 
-class FilterListsEvent extends ListsEvent {
-  String query;
+class FilterChangedEvent extends ListsEvent {
+  String filter;
 
-  FilterListsEvent({required this.query});
+  FilterChangedEvent({required this.filter});
 }
 
 class DeleteListEvent extends ListsEvent {

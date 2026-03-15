@@ -1,5 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:holapp/model/common/filter.dart';
 import 'package:holapp/model/groceries/list/groceries_list.dart';
+
 import 'lists_event.dart';
 import 'lists_state.dart';
 
@@ -11,17 +13,9 @@ class ListsBloc extends Bloc<ListsEvent, ListsState> {
         FetchListsEvent() => emit(
           state.copyWith(lists: lists, filtered: lists),
         ),
-        FilterListsEvent() => emit(
+        FilterChangedEvent() => emit(
           state.copyWith(
-            filtered: event.query.isEmpty
-                ? lists
-                : lists
-                      .where(
-                        (item) => item.name.toLowerCase().contains(
-                          event.query.toLowerCase(),
-                        ),
-                      )
-                      .toList(),
+            filter: event.filter.isEmpty ? null : Filter(str: event.filter),
           ),
         ),
         DeleteListEvent() => emit(deleteList(state, event.list)),
