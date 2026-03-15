@@ -96,7 +96,7 @@ class GroceriesListsOverview extends StatelessWidget {
                             ).call,
                           ),
                         ),
-                        const SizedBox(width: 8),
+                        const SizedBox(width: 4),
                         Expanded(
                           child: Select<SortDirection>(
                             itemBuilder: (context, item) =>
@@ -170,7 +170,7 @@ class GroceriesListsOverview extends StatelessWidget {
                             },
                           ),
                         ),
-                        SizedBox(width: 8),
+                        SizedBox(width: 4),
                         PrimaryButton(
                           onPressed:
                               (filtered.isEmpty &&
@@ -301,7 +301,7 @@ class GroceriesListsOverview extends StatelessWidget {
               ),
             ),
 
-            const SizedBox(width: 8),
+            const SizedBox(width: 4),
 
             Builder(
               builder: (context) {
