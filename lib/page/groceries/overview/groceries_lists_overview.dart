@@ -28,9 +28,9 @@ class GroceriesListsOverview extends StatelessWidget {
   }
 
   Scaffold listsScaffold(BuildContext context) {
-    final listsBloc = context.read<ListsBloc>();
+    final bloc = context.read<ListsBloc>();
 
-    listsBloc.add(FetchListsEvent());
+    bloc.add(FetchListsEvent());
 
     return Scaffold(
       child: BlocBuilder<ListsBloc, ListsState>(
@@ -54,9 +54,7 @@ class GroceriesListsOverview extends StatelessWidget {
                             Text(item.displayName()),
                         onChanged: (value) {
                           if (value != null) {
-                            listsBloc.add(
-                              SortablePropertyChangedEvent(prop: value),
-                            );
+                            bloc.add(SortablePropertyChangedEvent(prop: value));
                           }
                         },
                         value: state.prop,
@@ -82,7 +80,7 @@ class GroceriesListsOverview extends StatelessWidget {
                             Text(item.displayName()),
                         onChanged: (direction) {
                           if (direction != null) {
-                            listsBloc.add(
+                            bloc.add(
                               SortDirectionChangedEvent(direction: direction),
                             );
                           }
@@ -142,11 +140,31 @@ class GroceriesListsOverview extends StatelessWidget {
                         controller: searchController,
                         placeholder: const Text('Search'),
                         style: const TextStyle(fontSize: 18),
+                        features: [
+                          if (state.filter?.str.isNotEmpty ?? false)
+                            InputFeature.clear(
+                              skipFocusTraversal: false,
+                              icon: GestureDetector(
+                                child: Icon(Icons.clear),
+                                onTapUp: (details) {
+                                  _debouncer.debounce(
+                                    duration: Duration(milliseconds: 100),
+                                    onDebounce: () {
+                                      searchController.clear();
+                                      bloc.add(FilterChangedEvent(filter: ""));
+                                    },
+                                  );
+                                },
+                              ),
+                            ),
+                        ],
                         onChanged: (value) {
+                          print(value);
                           _debouncer.debounce(
                             duration: Duration(milliseconds: 234),
                             onDebounce: () {
-                              listsBloc.add(FilterChangedEvent(filter: value));
+                              print("MOIN");
+                              bloc.add(FilterChangedEvent(filter: value));
                             },
                           );
                         },
@@ -171,7 +189,7 @@ class GroceriesListsOverview extends StatelessWidget {
                                           ListsBloc,
                                           ListsState
                                         >(
-                                          bloc: listsBloc,
+                                          bloc: bloc,
                                           builder: (context, listsState) {
                                             return SizedBox(
                                               width: 240,
@@ -188,7 +206,7 @@ class GroceriesListsOverview extends StatelessWidget {
                                                     ),
                                                 onChanged: (value) {
                                                   if (value != null) {
-                                                    listsBloc.add(
+                                                    bloc.add(
                                                       ListTypeSelectionChanged(
                                                         selectedListType: value,
                                                       ),
@@ -196,9 +214,8 @@ class GroceriesListsOverview extends StatelessWidget {
                                                   }
                                                 },
                                                 // The current selection bound to this field.
-                                                value: listsBloc
-                                                    .state
-                                                    .selectedListType,
+                                                value:
+                                                    bloc.state.selectedListType,
                                                 placeholder: const Text(
                                                   'Select a type',
                                                 ),
@@ -228,7 +245,7 @@ class GroceriesListsOverview extends StatelessWidget {
                                     actions: [
                                       PrimaryButton(
                                         onPressed: () {
-                                          listsBloc.add(
+                                          bloc.add(
                                             CreateListEvent(
                                               name: searchController.text,
                                             ),
