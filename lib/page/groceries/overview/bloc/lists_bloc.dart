@@ -1,0 +1,77 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:holapp/model/groceries/groceries_item.dart';
+import 'package:holapp/model/groceries/list/groceries_list.dart';
+import 'package:holapp/util/filter.dart';
+
+import 'lists_event.dart';
+import 'lists_state.dart';
+
+// basically der reducer
+class ListsBloc extends Bloc<ListsEvent, ListsState> {
+  ListsBloc() : super(initialListsState) {
+    on<ListsEvent>(
+      (event, emit) => switch (event) {
+        FetchListsEvent() => emit(state.copyWith(lists: lists)),
+        FilterChangedEvent() => emit(
+          state.copyWith(
+            filter: event.filter.isEmpty ? null : Filter(str: event.filter),
+          ),
+        ),
+        DeleteListEvent() => emit(deleteList(state, event.list)),
+        CreateListEvent() => emit(
+          event.name.isNotEmpty
+              ? createAndAdd(state, state.selectedListType, event.name)
+              : state,
+        ),
+
+        ListTypeSelectionChanged() => emit(
+          state.copyWith(selectedListType: event.selectedListType),
+        ),
+        SortablePropertyChangedEvent() => emit(
+          state.copyWith(
+            prop: event.prop,
+            sort: switch (event.prop) {
+              GroceriesListSortableProperty.name => sortByName(
+                state.sort.direction,
+              ),
+
+              GroceriesListSortableProperty.length => sortByLength(
+                state.sort.direction,
+              ),
+              GroceriesListSortableProperty.date => sortByDate(
+                state.sort.direction,
+              ),
+            },
+          ),
+        ),
+        SortDirectionChangedEvent() => emit(
+          state.copyWith(sort: state.sort.copyWith(direction: event.direction)),
+        ),
+      },
+    );
+  }
+}
+
+ListsState deleteList(ListsState state, GroceriesList list) {
+  List<GroceriesList> newList = state.lists..remove(list);
+
+  return state.copyWith(lists: newList);
+}
+
+ListsState createAndAdd(ListsState state, Type type, String name) {
+  List<GroceriesList> newList = List.from(state.lists)
+    ..add(GroceriesList.create(type, name: name));
+
+  return state.copyWith(lists: newList);
+}
+
+List<GroceriesList> lists = [
+  PersistentGroceriesList.init(name: "Rewe"),
+  DisposableGroceriesList.init(name: "Birthdaypardaaayy"),
+  PersistentGroceriesList.init(name: "Lidl"),
+  PersistentGroceriesList(
+    name: "Aldi",
+    date: DateTime.now(),
+    groceries: [GroceriesItem.onePiece("item")],
+  ),
+];
