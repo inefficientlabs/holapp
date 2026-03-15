@@ -54,6 +54,6 @@ ListsState createAndAdd(ListsState state, Type type, String name) {
 
 List<GroceriesList> lists = [
   PersistentGroceriesList.init(name: "Rewe"),
-  OneWayGroceriesList.init(name: "Birthdaypardaaayy"),
+  DisposableGroceriesList.init(name: "Birthdaypardaaayy"),
   PersistentGroceriesList.init(name: "Lidl"),
 ];

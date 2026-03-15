@@ -24,12 +24,12 @@ sealed class GroceriesList {
   }
 
   static void provideFactoryRegistry() {
-    OneWayGroceriesList.register();
+    DisposableGroceriesList.register();
     PersistentGroceriesList.register();
   }
 }
 
-class OneWayGroceriesList extends GroceriesList {
+class DisposableGroceriesList extends GroceriesList {
   @override
   DateTime date = DateTime.now();
 
@@ -39,21 +39,21 @@ class OneWayGroceriesList extends GroceriesList {
   @override
   String name;
 
-  OneWayGroceriesList({
+  DisposableGroceriesList({
     required this.name,
     required this.date,
     required this.groceries,
   });
 
-  OneWayGroceriesList.init({required this.name}) {
+  DisposableGroceriesList.init({required this.name}) {
     date = DateTime.now();
     groceries = [];
   }
 
   static void register() {
     GroceriesList.register(
-      OneWayGroceriesList,
-      ({required String name}) => OneWayGroceriesList.init(name: name),
+      DisposableGroceriesList,
+      ({required String name}) => DisposableGroceriesList.init(name: name),
     );
   }
 }
