@@ -161,11 +161,9 @@ class GroceriesListsOverview extends StatelessWidget {
                                 ),
                             ],
                             onChanged: (value) {
-                              print(value);
                               _debouncer.debounce(
                                 duration: Duration(milliseconds: 234),
                                 onDebounce: () {
-                                  print("MOIN");
                                   bloc.add(FilterChangedEvent(filter: value));
                                 },
                               );
