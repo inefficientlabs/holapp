@@ -35,7 +35,7 @@ class ListsBloc extends Bloc<ListsEvent, ListsState> {
                 state.sort.direction,
               ),
 
-              GroceriesListSortableProperty.length => sortByLength(
+              GroceriesListSortableProperty.count => sortByLength(
                 state.sort.direction,
               ),
               GroceriesListSortableProperty.date => sortByDate(

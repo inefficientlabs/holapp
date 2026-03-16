@@ -29,12 +29,12 @@ sealed class GroceriesList {
   }
 }
 
-enum GroceriesListSortableProperty { name, length, date }
+enum GroceriesListSortableProperty { name, count, date }
 
 extension GroceriesListSortablePropertyExt on GroceriesListSortableProperty {
   String displayName() => switch (this) {
     GroceriesListSortableProperty.name => "name",
-    GroceriesListSortableProperty.length => "length",
+    GroceriesListSortableProperty.count => "count",
     GroceriesListSortableProperty.date => "date",
   };
 }
