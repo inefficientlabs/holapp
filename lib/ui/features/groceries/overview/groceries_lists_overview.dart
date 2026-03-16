@@ -93,46 +93,11 @@ class GroceriesListsOverview extends StatelessWidget {
                                                 fontSize: 18,
                                               ),
                                               features: [
-                                                if (searchController
-                                                    .text
-                                                    .isNotEmpty)
-                                                  InputFeature.clear(
-                                                    skipFocusTraversal: false,
-                                                    icon: GestureDetector(
-                                                      child: Icon(Icons.clear),
-                                                      onTapUp: (details) {
-                                                        _debouncer.debounce(
-                                                          duration: Duration(
-                                                            milliseconds: 100,
-                                                          ),
-                                                          onDebounce: () {
-                                                            searchController
-                                                                .clear();
-                                                            bloc.add(
-                                                              FilterChangedEvent(
-                                                                filter: "",
-                                                              ),
-                                                            );
-                                                          },
-                                                        );
-                                                      },
-                                                    ),
-                                                  ),
+                                                InputFeature.clear(
+                                                  skipFocusTraversal: false,
+                                                  icon: Icon(Icons.clear),
+                                                ),
                                               ],
-                                              onChanged: (value) {
-                                                _debouncer.debounce(
-                                                  duration: Duration(
-                                                    milliseconds: 234,
-                                                  ),
-                                                  onDebounce: () {
-                                                    bloc.add(
-                                                      FilterChangedEvent(
-                                                        filter: value,
-                                                      ),
-                                                    );
-                                                  },
-                                                );
-                                              },
                                             ),
                                             SizedBox(height: 4),
                                             Select<Type>(
