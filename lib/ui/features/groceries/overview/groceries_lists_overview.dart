@@ -14,6 +14,7 @@ class GroceriesListsOverview extends StatelessWidget {
   final Debouncer _debouncer = Debouncer();
 
   final TextEditingController searchController = TextEditingController();
+  final TextEditingController nameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -65,8 +66,151 @@ class GroceriesListsOverview extends StatelessWidget {
                         const SizedBox(height: 8),
                   ),
                 ),
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Expanded(
+                      child: PrimaryButton(
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (dialogContext) {
+                              return AlertDialog(
+                                title: Text('Create new list'),
+                                content: Builder(
+                                  builder: (innerContext) {
+                                    return BlocBuilder<ListsBloc, ListsState>(
+                                      bloc: bloc,
+                                      builder: (context, listsState) {
+                                        return Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.stretch,
+                                          children: [
+                                            TextField(
+                                              controller: nameController,
+                                              placeholder: const Text('Name'),
+                                              style: const TextStyle(
+                                                fontSize: 18,
+                                              ),
+                                              features: [
+                                                if (searchController
+                                                    .text
+                                                    .isNotEmpty)
+                                                  InputFeature.clear(
+                                                    skipFocusTraversal: false,
+                                                    icon: GestureDetector(
+                                                      child: Icon(Icons.clear),
+                                                      onTapUp: (details) {
+                                                        _debouncer.debounce(
+                                                          duration: Duration(
+                                                            milliseconds: 100,
+                                                          ),
+                                                          onDebounce: () {
+                                                            searchController
+                                                                .clear();
+                                                            bloc.add(
+                                                              FilterChangedEvent(
+                                                                filter: "",
+                                                              ),
+                                                            );
+                                                          },
+                                                        );
+                                                      },
+                                                    ),
+                                                  ),
+                                              ],
+                                              onChanged: (value) {
+                                                _debouncer.debounce(
+                                                  duration: Duration(
+                                                    milliseconds: 234,
+                                                  ),
+                                                  onDebounce: () {
+                                                    bloc.add(
+                                                      FilterChangedEvent(
+                                                        filter: value,
+                                                      ),
+                                                    );
+                                                  },
+                                                );
+                                              },
+                                            ),
+                                            SizedBox(height: 4),
+                                            Select<Type>(
+                                              itemBuilder: (context, item) {
+                                                return Text(
+                                                  item.toString(),
+                                                  style: TextStyle(
+                                                    fontSize: 18,
+                                                  ),
+                                                );
+                                              },
+                                              popupConstraints:
+                                                  const BoxConstraints(
+                                                    maxHeight: 300,
+                                                    maxWidth: 200,
+                                                  ),
+                                              onChanged: (value) {
+                                                if (value != null) {
+                                                  bloc.add(
+                                                    ListTypeSelectionChanged(
+                                                      selectedListType: value,
+                                                    ),
+                                                  );
+                                                }
+                                              },
+                                              value:
+                                                  bloc.state.selectedListType,
+                                              placeholder: const Text(
+                                                'Select a type',
+                                              ),
+                                              popup: SelectPopup(
+                                                items: SelectItemList(
+                                                  children: GroceriesList.types
+                                                      .map(
+                                                        (type) =>
+                                                            SelectItemButton(
+                                                              value: type,
+                                                              child: Text(
+                                                                type.toString(),
+                                                              ),
+                                                            ),
+                                                      )
+                                                      .toList(),
+                                                ),
+                                              ).call,
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
+                                  },
+                                ),
+                                actions: [
+                                  PrimaryButton(
+                                    enabled: nameController.text.isNotEmpty,
+                                    onPressed: () {
+                                      bloc.add(
+                                        CreateListEvent(
+                                          name: nameController.text,
+                                        ),
+                                      );
+                                      Navigator.pop(dialogContext);
+                                    },
+                                    child: Text("CREATE"),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
+                        child: const Icon(Icons.add, size: 24),
+                      ),
+                    ),
+                  ],
+                ),
                 Column(
                   children: [
+                    SizedBox(height: 4),
                     Row(
                       children: [
                         Expanded(
@@ -168,103 +312,6 @@ class GroceriesListsOverview extends StatelessWidget {
                               );
                             },
                           ),
-                        ),
-                        SizedBox(width: 4),
-                        PrimaryButton(
-                          onPressed:
-                              (filtered.isEmpty &&
-                                  (searchController.text.isNotEmpty))
-                              ? () {
-                                  showDialog(
-                                    context: context,
-                                    builder: (dialogContext) {
-                                      return AlertDialog(
-                                        title: Text(
-                                          'Create ${searchController.text}',
-                                        ),
-                                        content: Builder(
-                                          builder: (innerContext) {
-                                            return BlocBuilder<
-                                              ListsBloc,
-                                              ListsState
-                                            >(
-                                              bloc: bloc,
-                                              builder: (context, listsState) {
-                                                return SizedBox(
-                                                  width: 240,
-                                                  child: Select<Type>(
-                                                    // How to render each selected item as text in the field.
-                                                    itemBuilder:
-                                                        (context, item) {
-                                                          return Text(
-                                                            item.toString(),
-                                                          );
-                                                        },
-                                                    // Limit the popup size so it doesn't grow too large in the docs view.
-                                                    popupConstraints:
-                                                        const BoxConstraints(
-                                                          maxHeight: 300,
-                                                          maxWidth: 200,
-                                                        ),
-                                                    onChanged: (value) {
-                                                      if (value != null) {
-                                                        bloc.add(
-                                                          ListTypeSelectionChanged(
-                                                            selectedListType:
-                                                                value,
-                                                          ),
-                                                        );
-                                                      }
-                                                    },
-                                                    // The current selection bound to this field.
-                                                    value: bloc
-                                                        .state
-                                                        .selectedListType,
-                                                    placeholder: const Text(
-                                                      'Select a type',
-                                                    ),
-                                                    popup: SelectPopup(
-                                                      items: SelectItemList(
-                                                        children: GroceriesList
-                                                            .types
-                                                            .map(
-                                                              (
-                                                                type,
-                                                              ) => SelectItemButton(
-                                                                value: type,
-                                                                child: Text(
-                                                                  type.toString(),
-                                                                ),
-                                                              ),
-                                                            )
-                                                            .toList(),
-                                                      ),
-                                                    ).call,
-                                                  ),
-                                                );
-                                              },
-                                            );
-                                          },
-                                        ),
-                                        actions: [
-                                          PrimaryButton(
-                                            onPressed: () {
-                                              bloc.add(
-                                                CreateListEvent(
-                                                  name: searchController.text,
-                                                ),
-                                              );
-                                              Navigator.pop(dialogContext);
-                                            },
-                                            child: Text("CREATE"),
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  );
-                                }
-                              : null,
-                          child: const Icon(Icons.add, size: 24),
                         ),
                       ],
                     ),
