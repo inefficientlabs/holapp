@@ -99,8 +99,7 @@ class GroceriesListsOverview extends StatelessWidget {
                         const SizedBox(width: 4),
                         Expanded(
                           child: Select<SortDirection>(
-                            itemBuilder: (context, item) =>
-                                Text(item.displayName()),
+                            itemBuilder: (context, item) => item.icon(),
                             onChanged: (direction) {
                               if (direction != null) {
                                 bloc.add(
@@ -111,7 +110,7 @@ class GroceriesListsOverview extends StatelessWidget {
                               }
                             },
                             value: state.sort.direction,
-                            placeholder: const Text('Select a direction'),
+                            placeholder: state.sort.direction.icon(),
                             popup: SelectPopup(
                               items: SelectItemList(
                                 children:
@@ -122,7 +121,7 @@ class GroceriesListsOverview extends StatelessWidget {
                                         .map(
                                           (type) => SelectItemButton(
                                             value: type,
-                                            child: Text(type.displayName()),
+                                            child: type.icon(),
                                           ),
                                         )
                                         .toList(),
