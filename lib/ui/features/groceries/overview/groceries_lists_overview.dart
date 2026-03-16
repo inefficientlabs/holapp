@@ -1,11 +1,11 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_debouncer/flutter_debouncer.dart';
-import 'package:holapp/model/groceries/list/groceries_list.dart';
-import 'package:holapp/page/groceries/overview/bloc/lists_bloc.dart';
-import 'package:holapp/page/groceries/overview/bloc/lists_event.dart';
-import 'package:holapp/page/groceries/overview/bloc/lists_state.dart';
-import 'package:holapp/util/filter.dart';
-import 'package:holapp/util/sort.dart';
+import 'package:holapp/domain/models/groceries/list/groceries_list.dart';
+import 'package:holapp/ui/features/groceries/overview/bloc/lists_bloc.dart';
+import 'package:holapp/ui/features/groceries/overview/bloc/lists_event.dart';
+import 'package:holapp/ui/features/groceries/overview/bloc/lists_state.dart';
+import 'package:holapp/utils/filter.dart';
+import 'package:holapp/utils/sort.dart';
 import 'package:shadcn_flutter/shadcn_flutter.dart';
 
 class GroceriesListsOverview extends StatelessWidget {

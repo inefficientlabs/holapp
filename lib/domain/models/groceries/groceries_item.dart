@@ -1,4 +1,4 @@
-import 'package:holapp/model/common/unit.dart';
+import 'package:holapp/domain/models/common/unit.dart';
 
 class GroceriesItem<T> {
   String name;
