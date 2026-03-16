@@ -1,4 +1,4 @@
-import 'package:holapp/domain/models/groceries/groceries_item.dart';
+import 'package:holapp/domain/models/groceries/item/groceries_item.dart';
 
 typedef GroceriesListFactory = GroceriesList Function({required String name});
 
