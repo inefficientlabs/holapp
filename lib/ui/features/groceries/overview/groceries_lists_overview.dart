@@ -49,19 +49,17 @@ class GroceriesListsOverview extends StatelessWidget {
           return Column(
             children: [
               AppBar(
-                child: Expanded(
-                  child: Row(
-                    children: [
-                      SizedBox(width: 48),
-                      Expanded(child: Center(child: Text("Overview"))),
-                      GhostButton(
-                        child: Icon(LucideIcons.settings),
-                        onPressed: () {
-                          router.go(Routes.settings);
-                        },
-                      ),
-                    ],
-                  ),
+                child: Row(
+                  children: [
+                    SizedBox(width: 48),
+                    Expanded(child: Center(child: Text("Overview"))),
+                    GhostButton(
+                      child: Icon(LucideIcons.settings),
+                      onPressed: () {
+                        router.go(Routes.settings);
+                      },
+                    ),
+                  ],
                 ),
               ),
               Expanded(
