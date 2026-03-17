@@ -28,4 +28,12 @@ extension SortDirectionExt on SortDirection {
     SortDirection.ascending => "ascending",
     SortDirection.descending => "descending",
   };
+
+  Icon icon() => Icon(switch (this) {
+    SortDirection.none => Icons.line_axis,
+    SortDirection.ascending => Icons.arrow_upward,
+    SortDirection.descending => Icons.arrow_downward,
+  });
+
+  Text displayText() => Text(displayName());
 }

@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:holapp/model/groceries/groceries_item.dart';
-import 'package:holapp/model/groceries/list/groceries_list.dart';
-import 'package:holapp/util/filter.dart';
+import 'package:holapp/domain/models/groceries/item/groceries_item.dart';
+import 'package:holapp/domain/models/groceries/list/groceries_list.dart';
+import 'package:holapp/utils/filter.dart';
 
 import 'lists_event.dart';
 import 'lists_state.dart';
@@ -35,7 +35,7 @@ class ListsBloc extends Bloc<ListsEvent, ListsState> {
                 state.sort.direction,
               ),
 
-              GroceriesListSortableProperty.length => sortByLength(
+              GroceriesListSortableProperty.count => sortByLength(
                 state.sort.direction,
               ),
               GroceriesListSortableProperty.date => sortByDate(

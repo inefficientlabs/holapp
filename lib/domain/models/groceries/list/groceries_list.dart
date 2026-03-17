@@ -1,4 +1,4 @@
-import 'package:holapp/model/groceries/groceries_item.dart';
+import 'package:holapp/domain/models/groceries/item/groceries_item.dart';
 
 typedef GroceriesListFactory = GroceriesList Function({required String name});
 
@@ -29,12 +29,12 @@ sealed class GroceriesList {
   }
 }
 
-enum GroceriesListSortableProperty { name, length, date }
+enum GroceriesListSortableProperty { name, count, date }
 
 extension GroceriesListSortablePropertyExt on GroceriesListSortableProperty {
   String displayName() => switch (this) {
     GroceriesListSortableProperty.name => "name",
-    GroceriesListSortableProperty.length => "length",
+    GroceriesListSortableProperty.count => "count",
     GroceriesListSortableProperty.date => "date",
   };
 }

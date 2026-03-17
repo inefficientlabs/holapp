@@ -1,5 +1,5 @@
-import 'package:holapp/model/groceries/list/groceries_list.dart';
-import 'package:holapp/page/groceries/overview/groceries_lists_overview.dart';
+import 'package:holapp/domain/models/groceries/list/groceries_list.dart';
+import 'package:holapp/ui/features/groceries/overview/groceries_lists_overview.dart';
 import 'package:shadcn_flutter/shadcn_flutter.dart';
 
 void main() {

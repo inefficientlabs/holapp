@@ -1,4 +1,4 @@
-import 'package:holapp/model/groceries/list/groceries_list.dart';
+import 'package:holapp/domain/models/groceries/list/groceries_list.dart';
 import 'package:shadcn_flutter/shadcn_flutter_experimental.dart';
 
 sealed class ListsEvent {}

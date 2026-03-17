@@ -1,6 +1,6 @@
-import 'package:holapp/model/groceries/list/groceries_list.dart';
-import 'package:holapp/util/filter.dart';
-import 'package:holapp/util/sort.dart';
+import 'package:holapp/domain/models/groceries/list/groceries_list.dart';
+import 'package:holapp/utils/filter.dart';
+import 'package:holapp/utils/sort.dart';
 import 'package:shadcn_flutter/shadcn_flutter.dart';
 
 class ListsState {
