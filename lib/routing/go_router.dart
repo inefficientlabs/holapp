@@ -3,6 +3,7 @@ import 'package:holapp/domain/models/groceries/list/groceries_list.dart';
 import 'package:holapp/ui/features/groceries/detail/disposable.dart';
 import 'package:holapp/ui/features/groceries/detail/persistent.dart';
 import 'package:holapp/ui/features/groceries/overview/groceries_lists_overview.dart';
+import 'package:holapp/ui/features/settings/settings_view.dart';
 
 final GoRouter router = GoRouter(
   routes: [
@@ -25,6 +26,7 @@ final GoRouter router = GoRouter(
         };
       },
     ),
+    GoRoute(path: Routes.settings, builder: (context, state) => SettingsView()),
   ],
 );
 
@@ -33,4 +35,5 @@ class Routes {
 
   static const String overview = '/';
   static const String detail = '/detail';
+  static const String settings = '/settings';
 }
