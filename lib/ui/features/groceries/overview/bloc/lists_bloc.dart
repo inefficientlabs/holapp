@@ -20,7 +20,10 @@ class ListsBloc extends Bloc<ListsEvent, ListsState> {
         DeleteListEvent() => emit(deleteList(state, event.list)),
         CreateListEvent() => emit(
           event.name.isNotEmpty
-              ? createAndAdd(state, state.selectedListType, event.name)
+              ? state.copyWith(
+                  lists: List.from(state.lists)
+                    ..add(GroceriesList.create(event.type, name: event.name)),
+                )
               : state,
         ),
 
@@ -54,13 +57,6 @@ class ListsBloc extends Bloc<ListsEvent, ListsState> {
 
 ListsState deleteList(ListsState state, GroceriesList list) {
   List<GroceriesList> newList = state.lists..remove(list);
-
-  return state.copyWith(lists: newList);
-}
-
-ListsState createAndAdd(ListsState state, Type type, String name) {
-  List<GroceriesList> newList = List.from(state.lists)
-    ..add(GroceriesList.create(type, name: name));
 
   return state.copyWith(lists: newList);
 }

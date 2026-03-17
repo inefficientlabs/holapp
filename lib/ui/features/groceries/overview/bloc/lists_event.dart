@@ -31,8 +31,9 @@ class DeleteListEvent extends ListsEvent {
 
 class CreateListEvent extends ListsEvent {
   String name;
+  Type type;
 
-  CreateListEvent({required this.name});
+  CreateListEvent({required this.name, required this.type});
 }
 
 class ListTypeSelectionChanged extends ListsEvent {

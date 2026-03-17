@@ -5,7 +5,6 @@ import 'package:shadcn_flutter/shadcn_flutter.dart';
 
 class ListsState {
   final List<GroceriesList> lists;
-  final Type selectedListType;
 
   final Sort sort;
   final GroceriesListSortableProperty prop;
@@ -13,7 +12,6 @@ class ListsState {
 
   ListsState({
     required this.lists,
-    required this.selectedListType,
     required this.sort,
     required this.prop,
     required this.filter,
@@ -29,7 +27,6 @@ class ListsState {
   }) {
     return ListsState(
       lists: lists ?? this.lists,
-      selectedListType: selectedListType ?? this.selectedListType,
       sort: sort ?? this.sort,
       prop: prop ?? this.prop,
       filter: filter,
@@ -39,7 +36,6 @@ class ListsState {
 
 final ListsState initialListsState = ListsState(
   lists: List.empty(),
-  selectedListType: PersistentGroceriesList,
   sort: sortByLength(SortDirection.descending),
   prop: GroceriesListSortableProperty.name,
   filter: null,

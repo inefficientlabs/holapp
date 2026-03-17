@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_debouncer/flutter_debouncer.dart';
 import 'package:holapp/domain/models/groceries/list/groceries_list.dart';
+import 'package:holapp/ui/features/groceries/create_dialog/create_dialog.dart';
 import 'package:holapp/ui/features/groceries/overview/bloc/lists_bloc.dart';
 import 'package:holapp/ui/features/groceries/overview/bloc/lists_event.dart';
 import 'package:holapp/ui/features/groceries/overview/bloc/lists_state.dart';
@@ -71,102 +72,26 @@ class GroceriesListsOverview extends StatelessWidget {
                   children: [
                     Expanded(
                       child: PrimaryButton(
-                        onPressed: () {
-                          showDialog(
+                        onPressed: () async {
+                          var result = await showDialog<CreateListDialogData>(
                             context: context,
                             builder: (dialogContext) {
-                              return AlertDialog(
-                                title: Text('Create new list'),
-                                content: Builder(
-                                  builder: (innerContext) {
-                                    return BlocBuilder<ListsBloc, ListsState>(
-                                      bloc: bloc,
-                                      builder: (context, listsState) {
-                                        return Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.stretch,
-                                          children: [
-                                            TextField(
-                                              controller: nameController,
-                                              placeholder: const Text('Name'),
-                                              style: const TextStyle(
-                                                fontSize: 18,
-                                              ),
-                                              features: [
-                                                InputFeature.clear(
-                                                  skipFocusTraversal: false,
-                                                  icon: Icon(Icons.clear),
-                                                ),
-                                              ],
-                                            ),
-                                            SizedBox(height: 4),
-                                            Select<Type>(
-                                              itemBuilder: (context, item) {
-                                                return Text(
-                                                  item.toString(),
-                                                  style: TextStyle(
-                                                    fontSize: 18,
-                                                  ),
-                                                );
-                                              },
-                                              popupConstraints:
-                                                  const BoxConstraints(
-                                                    maxHeight: 300,
-                                                    maxWidth: 200,
-                                                  ),
-                                              onChanged: (value) {
-                                                if (value != null) {
-                                                  bloc.add(
-                                                    ListTypeSelectionChanged(
-                                                      selectedListType: value,
-                                                    ),
-                                                  );
-                                                }
-                                              },
-                                              value:
-                                                  bloc.state.selectedListType,
-                                              placeholder: const Text(
-                                                'Select a type',
-                                              ),
-                                              popup: SelectPopup(
-                                                items: SelectItemList(
-                                                  children: GroceriesList.types
-                                                      .map(
-                                                        (type) =>
-                                                            SelectItemButton(
-                                                              value: type,
-                                                              child: Text(
-                                                                type.toString(),
-                                                              ),
-                                                            ),
-                                                      )
-                                                      .toList(),
-                                                ),
-                                              ).call,
-                                            ),
-                                          ],
-                                        );
-                                      },
-                                    );
-                                  },
-                                ),
-                                actions: [
-                                  PrimaryButton(
-                                    enabled: nameController.text.isNotEmpty,
-                                    onPressed: () {
-                                      bloc.add(
-                                        CreateListEvent(
-                                          name: nameController.text,
-                                        ),
-                                      );
-                                      Navigator.pop(dialogContext);
-                                    },
-                                    child: Text("CREATE"),
-                                  ),
-                                ],
-                              );
+                              return CreateListDialog();
                             },
                           );
+                          if (result != null) {
+                            _debouncer.debounce(
+                              duration: Duration(milliseconds: 200),
+                              onDebounce: () {
+                                bloc.add(
+                                  CreateListEvent(
+                                    name: result.name,
+                                    type: result.type,
+                                  ),
+                                );
+                              },
+                            );
+                          }
                         },
                         child: const Icon(Icons.add, size: 24),
                       ),
