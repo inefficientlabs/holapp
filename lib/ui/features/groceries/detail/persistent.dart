@@ -31,7 +31,12 @@ class PersistentGroceriesListDetail extends StatelessWidget {
                   },
                 ),
                 Expanded(child: Center(child: Text(list.name))),
-                GhostButton(child: Icon(LucideIcons.settings)),
+                GhostButton(
+                  onPressed: () {
+                    router.go(Routes.settings);
+                  },
+                  child: Icon(LucideIcons.settings),
+                ),
               ],
             ),
           ),
