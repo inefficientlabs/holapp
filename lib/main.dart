@@ -1,5 +1,5 @@
 import 'package:holapp/domain/models/groceries/list/groceries_list.dart';
-import 'package:holapp/ui/features/groceries/overview/groceries_lists_overview.dart';
+import 'package:holapp/routing/go_router.dart';
 import 'package:shadcn_flutter/shadcn_flutter.dart';
 
 void main() {
@@ -13,6 +13,6 @@ class HolApp extends StatelessWidget {
   Widget build(BuildContext context) {
     GroceriesList.provideFactoryRegistry();
 
-    return ShadcnApp(title: 'hol', home: GroceriesListsOverview());
+    return ShadcnApp.router(title: 'hol', routerConfig: router);
   }
 }
