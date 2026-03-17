@@ -1,6 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_debouncer/flutter_debouncer.dart';
+import 'package:holapp/config/config.dart';
 import 'package:holapp/domain/models/groceries/list/groceries_list.dart';
+import 'package:holapp/routing/go_router.dart';
 import 'package:holapp/ui/features/groceries/create_dialog/create_dialog.dart';
 import 'package:holapp/ui/features/groceries/overview/bloc/lists_bloc.dart';
 import 'package:holapp/ui/features/groceries/overview/bloc/lists_event.dart';
@@ -26,7 +28,7 @@ class GroceriesListsOverview extends StatelessWidget {
   }
 
   void openList(GroceriesList list) {
-    print("open ${list.name}");
+    router.go(Routes.detail, extra: list);
   }
 
   Scaffold listsScaffold(BuildContext context) {
@@ -51,52 +53,51 @@ class GroceriesListsOverview extends StatelessWidget {
                 SizedBox(height: 0),
                 Expanded(
                   child: ListView.separated(
-                    itemCount: filtered.length,
-                    itemBuilder: (context, index) => GestureDetector(
-                      onTap: () {
-                        _debouncer.debounce(
-                          duration: Duration(milliseconds: 234),
-                          onDebounce: () {
-                            openList(filtered[index]);
+                    itemCount: filtered.length + 1,
+                    itemBuilder: (context, index) {
+                      if (index < filtered.length) {
+                        final list = filtered[index];
+                        return GestureDetector(
+                          onTap: () {
+                            _debouncer.debounce(
+                              duration: Config.debounceDuration,
+                              onDebounce: () => openList(list),
+                            );
                           },
+                          child: toCard(list),
                         );
-                      },
-                      child: toCard(filtered[index]),
-                    ),
+                      } else {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8),
+                          child: PrimaryButton(
+                            onPressed: () async {
+                              var result =
+                                  await showDialog<CreateListDialogData>(
+                                    context: context,
+                                    builder: (_) => CreateListDialog(),
+                                  );
+                              if (result != null) {
+                                _debouncer.debounce(
+                                  duration: Duration(milliseconds: 200),
+                                  onDebounce: () {
+                                    context.read<ListsBloc>().add(
+                                      CreateListEvent(
+                                        name: result.name,
+                                        type: result.type,
+                                      ),
+                                    );
+                                  },
+                                );
+                              }
+                            },
+                            child: const Icon(Icons.add, size: 24),
+                          ),
+                        );
+                      }
+                    },
                     separatorBuilder: (context, index) =>
                         const SizedBox(height: 8),
                   ),
-                ),
-                Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Expanded(
-                      child: PrimaryButton(
-                        onPressed: () async {
-                          var result = await showDialog<CreateListDialogData>(
-                            context: context,
-                            builder: (dialogContext) {
-                              return CreateListDialog();
-                            },
-                          );
-                          if (result != null) {
-                            _debouncer.debounce(
-                              duration: Duration(milliseconds: 200),
-                              onDebounce: () {
-                                bloc.add(
-                                  CreateListEvent(
-                                    name: result.name,
-                                    type: result.type,
-                                  ),
-                                );
-                              },
-                            );
-                          }
-                        },
-                        child: const Icon(Icons.add, size: 24),
-                      ),
-                    ),
-                  ],
                 ),
                 Column(
                   children: [
@@ -195,7 +196,7 @@ class GroceriesListsOverview extends StatelessWidget {
                             ],
                             onChanged: (value) {
                               _debouncer.debounce(
-                                duration: Duration(milliseconds: 234),
+                                duration: Config.debounceDuration,
                                 onDebounce: () {
                                   bloc.add(FilterChangedEvent(filter: value));
                                 },
@@ -287,7 +288,7 @@ class GroceriesListsOverview extends StatelessWidget {
                       },
                     );
                   },
-                  child: const Icon(LucideIcons.settings),
+                  child: GhostButton(child: const Icon(LucideIcons.settings)),
                 );
               },
             ),
