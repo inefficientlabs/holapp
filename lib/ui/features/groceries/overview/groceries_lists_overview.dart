@@ -92,10 +92,13 @@ class GroceriesListsOverview extends StatelessWidget {
                                           builder: (_) => CreateListDialog(),
                                         );
                                     if (result != null) {
+                                      bloc.add(
+                                        SetLoadingEvent(isLoading: true),
+                                      );
                                       _debouncer.debounce(
-                                        duration: Duration(milliseconds: 200),
+                                        duration: Duration(milliseconds: 500),
                                         onDebounce: () {
-                                          context.read<ListsBloc>().add(
+                                          bloc.add(
                                             CreateListEvent(
                                               name: result.name,
                                               type: result.type,

@@ -3,6 +3,12 @@ import 'package:shadcn_flutter/shadcn_flutter_experimental.dart';
 
 sealed class ListsEvent {}
 
+class SetLoadingEvent extends ListsEvent {
+  bool isLoading;
+
+  SetLoadingEvent({required this.isLoading});
+}
+
 class FetchListsEvent extends ListsEvent {}
 
 class FilterChangedEvent extends ListsEvent {

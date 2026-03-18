@@ -25,8 +25,9 @@ class ListsBloc extends Bloc<ListsEvent, ListsState> {
               ? state.copyWith(
                   lists: List.from(state.lists)
                     ..add(GroceriesList.create(event.type, name: event.name)),
+                  isLoading: false,
                 )
-              : state,
+              : state.copyWith(isLoading: false),
         ),
 
         SortablePropertyChangedEvent() => emit(
@@ -49,6 +50,7 @@ class ListsBloc extends Bloc<ListsEvent, ListsState> {
         SortDirectionChangedEvent() => emit(
           state.copyWith(sort: state.sort.copyWith(direction: event.direction)),
         ),
+        SetLoadingEvent() => emit(state.copyWith(isLoading: event.isLoading)),
       },
     );
   }
