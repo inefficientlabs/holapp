@@ -11,7 +11,9 @@ class ListsBloc extends Bloc<ListsEvent, ListsState> {
   ListsBloc() : super(initialListsState) {
     on<ListsEvent>(
       (event, emit) => switch (event) {
-        FetchListsEvent() => emit(state.copyWith(lists: lists)),
+        FetchListsEvent() => emit(
+          state.copyWith(lists: lists, isLoading: false),
+        ),
         FilterChangedEvent() => emit(
           state.copyWith(
             filter: event.filter.isEmpty ? null : Filter(str: event.filter),
@@ -27,9 +29,6 @@ class ListsBloc extends Bloc<ListsEvent, ListsState> {
               : state,
         ),
 
-        ListTypeSelectionChanged() => emit(
-          state.copyWith(selectedListType: event.selectedListType),
-        ),
         SortablePropertyChangedEvent() => emit(
           state.copyWith(
             prop: event.prop,

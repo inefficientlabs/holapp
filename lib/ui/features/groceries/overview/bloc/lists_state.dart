@@ -6,6 +6,8 @@ import 'package:shadcn_flutter/shadcn_flutter.dart';
 class ListsState {
   final List<GroceriesList> lists;
 
+  final bool isLoading;
+
   final Sort sort;
   final GroceriesListSortableProperty prop;
   final Filter? filter;
@@ -15,20 +17,22 @@ class ListsState {
     required this.sort,
     required this.prop,
     required this.filter,
+    required this.isLoading,
   });
 
   // Builder/copy method
   ListsState copyWith({
+    GroceriesListSortableProperty? prop,
     List<GroceriesList>? lists,
-    var selectedListType,
-    var sort,
-    var prop,
-    var filter,
+    bool? isLoading,
+    Sort? sort,
+    Filter? filter,
   }) {
     return ListsState(
       lists: lists ?? this.lists,
       sort: sort ?? this.sort,
       prop: prop ?? this.prop,
+      isLoading: isLoading ?? this.isLoading,
       filter: filter,
     );
   }
@@ -39,6 +43,7 @@ final ListsState initialListsState = ListsState(
   sort: sortByLength(SortDirection.descending),
   prop: GroceriesListSortableProperty.name,
   filter: null,
+  isLoading: true,
 );
 
 Sort<GroceriesList, String> sortByName(SortDirection direction) =>

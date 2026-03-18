@@ -1,3 +1,4 @@
+import 'package:holapp/config/config.dart';
 import 'package:holapp/routing/go_router.dart';
 import 'package:holapp/ui/features/settings/settings_provider.dart';
 import 'package:holapp/utils/theme_mode.dart';
@@ -11,28 +12,28 @@ class SettingsView extends StatelessWidget {
     final settingsController = SettingsProvider.of(context);
 
     return Scaffold(
-      child: Column(
-        children: [
-          AppBar(
-            child: Row(
-              children: [
-                SizedBox(
-                  width: 48,
-                  child: GhostButton(
-                    onPressed: () {
-                      router.go(Routes.overview);
-                    },
-                    child: Icon(LucideIcons.arrowLeft),
+      child: Padding(
+        padding: Config.insetLeftRightBottom,
+        child: Column(
+          children: [
+            AppBar(
+              child: Row(
+                children: [
+                  SizedBox(
+                    width: 48,
+                    child: GhostButton(
+                      onPressed: () {
+                        router.go(Routes.overview);
+                      },
+                      child: Icon(LucideIcons.arrowLeft),
+                    ),
                   ),
-                ),
-                Expanded(child: Center(child: Text("Settings"))),
-                SizedBox(width: 48),
-              ],
+                  Expanded(child: Center(child: Text("Settings"))),
+                  SizedBox(width: 48),
+                ],
+              ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 4, right: 4),
-            child: Row(
+            Row(
               children: [
                 Expanded(child: Text("Theme")),
                 Expanded(
@@ -61,8 +62,8 @@ class SettingsView extends StatelessWidget {
                 ),
               ],
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -35,9 +35,3 @@ class CreateListEvent extends ListsEvent {
 
   CreateListEvent({required this.name, required this.type});
 }
-
-class ListTypeSelectionChanged extends ListsEvent {
-  Type selectedListType;
-
-  ListTypeSelectionChanged({required this.selectedListType});
-}
