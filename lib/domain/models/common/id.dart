@@ -12,4 +12,10 @@ class Id {
   Id.init() {
     id = _uuid.v4();
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true; // same instance
+    return other is Id && other.id == id; // compare id strings
+  }
 }

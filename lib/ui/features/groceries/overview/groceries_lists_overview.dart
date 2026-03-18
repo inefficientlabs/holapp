@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_debouncer/flutter_debouncer.dart';
+import 'package:go_router/go_router.dart';
 import 'package:holapp/config/config.dart';
 import 'package:holapp/domain/models/groceries/list/groceries_list.dart';
 import 'package:holapp/routing/hol_go_router.dart';
@@ -57,7 +58,7 @@ class GroceriesListsOverview extends StatelessWidget {
                             GhostButton(
                               child: Icon(LucideIcons.settings),
                               onPressed: () {
-                                router.go(Routes.settings);
+                                context.go(Routes.settings);
                               },
                             ),
                           ],
@@ -71,7 +72,7 @@ class GroceriesListsOverview extends StatelessWidget {
                               final list = filtered[index];
                               return GestureDetector(
                                 onTap: () {
-                                  router.go(Routes.detail, extra: list);
+                                  context.go("/detail/${list.id.id}");
                                 },
                                 child: toCard(list),
                               );

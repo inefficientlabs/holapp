@@ -1,6 +1,8 @@
+import 'dart:io';
+
 import 'package:go_router/go_router.dart';
-import 'package:holapp/domain/models/groceries/list/groceries_list.dart';
-import 'package:holapp/ui/features/groceries/detail/detail_wrapper.dart';
+import 'package:holapp/domain/models/common/id.dart';
+import 'package:holapp/ui/features/groceries/detail/wrapper/view/wrapper_page.dart';
 import 'package:holapp/ui/features/groceries/overview/groceries_lists_overview.dart';
 import 'package:holapp/ui/features/settings/settings_view.dart';
 
@@ -11,11 +13,13 @@ final GoRouter router = GoRouter(
       builder: (context, state) => GroceriesListsOverview(),
     ),
     GoRoute(
-      path: Routes.detail,
+      path: Routes.detailId,
       builder: (context, state) {
-        final list = state.extra as GroceriesList;
+        print(state.pathParameters);
+        final pathId =
+            state.pathParameters['id'] ?? (throw PathNotFoundException);
 
-        return GroceriesListDetailWrapper(list: list);
+        return WrapperPage(id: Id(id: pathId));
       },
     ),
     GoRoute(path: Routes.settings, builder: (context, state) => SettingsView()),
@@ -27,5 +31,6 @@ class Routes {
 
   static const String overview = '/';
   static const String detail = '/detail';
+  static const String detailId = '/detail/:id';
   static const String settings = '/settings';
 }
