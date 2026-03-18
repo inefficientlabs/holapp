@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:holapp/domain/models/groceries/item/groceries_item.dart';
+import 'package:holapp/data/repositories/groceries_lists_repository_mock.dart';
 import 'package:holapp/domain/models/groceries/list/groceries_list.dart';
 import 'package:holapp/utils/filter.dart';
 
@@ -13,25 +13,41 @@ class ListsBloc extends Bloc<ListsEvent, ListsState> {
       (event, emit) async => switch (event) {
         FetchListsEvent() => await Future.delayed(
           Duration(milliseconds: 500),
-          () => emit(state.copyWith(lists: lists, isLoading: false)),
+          () => emit(
+            state.copyWith(
+              lists: GroceriesListRepositoryMock.instance.lists,
+              isLoading: false,
+            ),
+          ),
         ),
         FilterChangedEvent() => emit(
           state.copyWith(
             filter: event.filter.isEmpty ? null : Filter(str: event.filter),
           ),
         ),
-        DeleteListEvent() => emit(deleteList(state, event.list)),
+        DeleteListEvent() => {
+          GroceriesListRepositoryMock.instance.remove(event.list),
+
+          emit(
+            state.copyWith(lists: GroceriesListRepositoryMock.instance.lists),
+          ),
+        },
         CreateListEvent() => await Future.delayed(
           Duration(milliseconds: 500),
-          () => emit(
-            event.name.isNotEmpty
-                ? state.copyWith(
-                    lists: List.from(state.lists)
-                      ..add(GroceriesList.create(event.type, name: event.name)),
-                    isLoading: false,
-                  )
-                : state.copyWith(isLoading: false),
-          ),
+          () {
+            GroceriesListRepositoryMock.instance.add(
+              GroceriesList.create(event.type, name: event.name),
+            );
+
+            return emit(
+              event.name.isNotEmpty
+                  ? state.copyWith(
+                      lists: GroceriesListRepositoryMock.instance.lists,
+                      isLoading: false,
+                    )
+                  : state.copyWith(isLoading: false),
+            );
+          },
         ),
         SortablePropertyChangedEvent() => emit(
           state.copyWith(
@@ -58,20 +74,3 @@ class ListsBloc extends Bloc<ListsEvent, ListsState> {
     );
   }
 }
-
-ListsState deleteList(ListsState state, GroceriesList list) {
-  List<GroceriesList> newList = state.lists..remove(list);
-
-  return state.copyWith(lists: newList);
-}
-
-List<GroceriesList> lists = [
-  PersistentGroceriesList.init(name: "Rewe"),
-  DisposableGroceriesList.init(name: "Birthdaypardaaayy"),
-  PersistentGroceriesList.init(name: "Lidl"),
-  PersistentGroceriesList(
-    name: "Aldi",
-    date: DateTime.now(),
-    groceries: [GroceriesItem.onePiece("item")],
-  ),
-];
