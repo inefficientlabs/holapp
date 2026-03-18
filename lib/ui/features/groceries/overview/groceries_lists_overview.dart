@@ -30,12 +30,8 @@ class GroceriesListsOverview extends StatelessWidget {
   Scaffold listsScaffold(BuildContext context) {
     final bloc = context.read<ListsBloc>();
 
-    _debouncer.debounce(
-      duration: Duration(milliseconds: 500),
-      onDebounce: () {
-        bloc.add(FetchListsEvent());
-      },
-    );
+    bloc.add(SetLoadingEvent(isLoading: true));
+    bloc.add(FetchListsEvent());
 
     return Scaffold(
       child: BlocBuilder<ListsBloc, ListsState>(
@@ -95,16 +91,11 @@ class GroceriesListsOverview extends StatelessWidget {
                                       bloc.add(
                                         SetLoadingEvent(isLoading: true),
                                       );
-                                      _debouncer.debounce(
-                                        duration: Duration(milliseconds: 500),
-                                        onDebounce: () {
-                                          bloc.add(
-                                            CreateListEvent(
-                                              name: result.name,
-                                              type: result.type,
-                                            ),
-                                          );
-                                        },
+                                      bloc.add(
+                                        CreateListEvent(
+                                          name: result.name,
+                                          type: result.type,
+                                        ),
                                       );
                                     }
                                   },

@@ -10,9 +10,10 @@ import 'lists_state.dart';
 class ListsBloc extends Bloc<ListsEvent, ListsState> {
   ListsBloc() : super(initialListsState) {
     on<ListsEvent>(
-      (event, emit) => switch (event) {
-        FetchListsEvent() => emit(
-          state.copyWith(lists: lists, isLoading: false),
+      (event, emit) async => switch (event) {
+        FetchListsEvent() => await Future.delayed(
+          Duration(milliseconds: 500),
+          () => emit(state.copyWith(lists: lists, isLoading: false)),
         ),
         FilterChangedEvent() => emit(
           state.copyWith(
@@ -20,16 +21,18 @@ class ListsBloc extends Bloc<ListsEvent, ListsState> {
           ),
         ),
         DeleteListEvent() => emit(deleteList(state, event.list)),
-        CreateListEvent() => emit(
-          event.name.isNotEmpty
-              ? state.copyWith(
-                  lists: List.from(state.lists)
-                    ..add(GroceriesList.create(event.type, name: event.name)),
-                  isLoading: false,
-                )
-              : state.copyWith(isLoading: false),
+        CreateListEvent() => await Future.delayed(
+          Duration(milliseconds: 500),
+          () => emit(
+            event.name.isNotEmpty
+                ? state.copyWith(
+                    lists: List.from(state.lists)
+                      ..add(GroceriesList.create(event.type, name: event.name)),
+                    isLoading: false,
+                  )
+                : state.copyWith(isLoading: false),
+          ),
         ),
-
         SortablePropertyChangedEvent() => emit(
           state.copyWith(
             prop: event.prop,
