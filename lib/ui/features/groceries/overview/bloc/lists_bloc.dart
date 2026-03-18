@@ -8,11 +8,13 @@ import 'lists_state.dart';
 
 // basically der reducer
 class ListsBloc extends Bloc<ListsEvent, ListsState> {
+  final Duration simDuration = Duration(milliseconds: 250);
+
   ListsBloc() : super(initialListsState) {
     on<ListsEvent>(
       (event, emit) async => switch (event) {
         FetchListsEvent() => await Future.delayed(
-          Duration(milliseconds: 500),
+          simDuration,
           () => emit(
             state.copyWith(
               lists: GroceriesListRepositoryMock.instance.lists,
@@ -32,23 +34,20 @@ class ListsBloc extends Bloc<ListsEvent, ListsState> {
             state.copyWith(lists: GroceriesListRepositoryMock.instance.lists),
           ),
         },
-        CreateListEvent() => await Future.delayed(
-          Duration(milliseconds: 500),
-          () {
-            GroceriesListRepositoryMock.instance.add(
-              GroceriesList.create(event.type, name: event.name),
-            );
+        CreateListEvent() => await Future.delayed(simDuration, () {
+          GroceriesListRepositoryMock.instance.add(
+            GroceriesList.create(event.type, name: event.name),
+          );
 
-            return emit(
-              event.name.isNotEmpty
-                  ? state.copyWith(
-                      lists: GroceriesListRepositoryMock.instance.lists,
-                      isLoading: false,
-                    )
-                  : state.copyWith(isLoading: false),
-            );
-          },
-        ),
+          return emit(
+            event.name.isNotEmpty
+                ? state.copyWith(
+                    lists: GroceriesListRepositoryMock.instance.lists,
+                    isLoading: false,
+                  )
+                : state.copyWith(isLoading: false),
+          );
+        }),
         SortablePropertyChangedEvent() => emit(
           state.copyWith(
             prop: event.prop,

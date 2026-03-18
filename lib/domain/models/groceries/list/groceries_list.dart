@@ -1,8 +1,10 @@
+import 'package:holapp/domain/models/common/id.dart';
 import 'package:holapp/domain/models/groceries/item/groceries_item.dart';
 
 typedef GroceriesListFactory = GroceriesList Function({required String name});
 
 sealed class GroceriesList {
+  late Id id;
   late String name;
   late DateTime date;
   late List<GroceriesItem> groceries;
@@ -41,6 +43,9 @@ extension GroceriesListSortablePropertyExt on GroceriesListSortableProperty {
 
 class DisposableGroceriesList extends GroceriesList {
   @override
+  late Id id;
+
+  @override
   DateTime date = DateTime.now();
 
   @override
@@ -50,12 +55,14 @@ class DisposableGroceriesList extends GroceriesList {
   String name;
 
   DisposableGroceriesList({
+    required this.id,
     required this.name,
     required this.date,
     required this.groceries,
   });
 
   DisposableGroceriesList.init({required this.name}) {
+    id = Id.init();
     date = DateTime.now();
     groceries = [];
   }
@@ -70,6 +77,9 @@ class DisposableGroceriesList extends GroceriesList {
 
 class PersistentGroceriesList extends GroceriesList {
   @override
+  late Id id;
+
+  @override
   DateTime date = DateTime.now();
 
   @override
@@ -81,12 +91,14 @@ class PersistentGroceriesList extends GroceriesList {
   List<GroceriesItem> history = [];
 
   PersistentGroceriesList({
+    required this.id,
     required this.name,
     required this.date,
     required this.groceries,
   });
 
   PersistentGroceriesList.init({required this.name}) {
+    id = Id.init();
     date = DateTime.now();
     groceries = [];
   }

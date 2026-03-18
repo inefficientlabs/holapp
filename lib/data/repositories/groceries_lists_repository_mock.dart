@@ -1,3 +1,4 @@
+import 'package:holapp/domain/models/common/id.dart';
 import 'package:holapp/domain/models/groceries/item/groceries_item.dart';
 import 'package:holapp/domain/models/groceries/list/groceries_list.dart';
 
@@ -9,6 +10,7 @@ class GroceriesListRepositoryMock {
     DisposableGroceriesList.init(name: "Birthdaypardaaayy"),
     PersistentGroceriesList.init(name: "Lidl"),
     PersistentGroceriesList(
+      id: Id.init(),
       name: "Aldi",
       date: DateTime.now(),
       groceries: [GroceriesItem.onePiece("item")],
@@ -23,5 +25,9 @@ class GroceriesListRepositoryMock {
 
   void remove(GroceriesList list) {
     _lists.remove(list);
+  }
+
+  GroceriesList? findByIdOrNull(Id id) {
+    return _lists.firstWhere((it) => it.id == id);
   }
 }
