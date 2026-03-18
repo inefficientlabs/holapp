@@ -1,6 +1,6 @@
 import 'package:holapp/config/config.dart';
 import 'package:holapp/domain/models/groceries/list/groceries_list.dart';
-import 'package:holapp/routing/go_router.dart';
+import 'package:holapp/routing/hol_go_router.dart';
 import 'package:shadcn_flutter/shadcn_flutter.dart';
 
 class PersistentGroceriesListDetail extends StatelessWidget {

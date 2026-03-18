@@ -2,7 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_debouncer/flutter_debouncer.dart';
 import 'package:holapp/config/config.dart';
 import 'package:holapp/domain/models/groceries/list/groceries_list.dart';
-import 'package:holapp/routing/go_router.dart';
+import 'package:holapp/routing/hol_go_router.dart';
 import 'package:holapp/ui/features/groceries/create_dialog/create_dialog.dart';
 import 'package:holapp/ui/features/groceries/overview/bloc/lists_bloc.dart';
 import 'package:holapp/ui/features/groceries/overview/bloc/lists_event.dart';

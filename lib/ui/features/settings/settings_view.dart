@@ -1,5 +1,5 @@
 import 'package:holapp/config/config.dart';
-import 'package:holapp/routing/go_router.dart';
+import 'package:holapp/routing/hol_go_router.dart';
 import 'package:holapp/ui/features/settings/settings_provider.dart';
 import 'package:holapp/utils/theme_mode.dart';
 import 'package:shadcn_flutter/shadcn_flutter.dart';
