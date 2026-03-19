@@ -23,31 +23,31 @@ class WrapperPage extends StatelessWidget {
       child: BlocBuilder<WrapperBloc, WrapperState>(
         builder: (context, state) {
           return Scaffold(
-            child: state.isLoading
-                ? const Center(child: CircularProgressIndicator(size: 40))
-                : state.list == null
-                ? Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Center(child: Text("List ${id.id} not found")),
-                      const SizedBox(height: 12),
-                      GhostButton(
-                        child: Text("Back to home"),
-                        onPressed: () => context.go(Routes.overview),
-                      ),
-                    ],
-                  )
-                : switch (state.list!) {
-                    DisposableGroceriesList() => DisposableGroceriesListDetail(
-                      list: state.list! as DisposableGroceriesList,
-                    ),
-                    PersistentGroceriesList() => PersistentGroceriesListDetail(
-                      list: state.list! as PersistentGroceriesList,
-                    ),
-                  },
+            child: switch (state.isLoading) {
+              true => const Center(child: CircularProgressIndicator(size: 40)),
+              false => loadingFinished(context, state.list),
+            },
           );
         },
       ),
     );
+  }
+
+  Widget loadingFinished(BuildContext context, GroceriesList? list) {
+    return switch (list) {
+      null => Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Center(child: Text("List ${id.id} not found")),
+          const SizedBox(height: 12),
+          GhostButton(
+            child: Text("Back to home"),
+            onPressed: () => context.go(Routes.overview),
+          ),
+        ],
+      ),
+      DisposableGroceriesList() => DisposableGroceriesListDetail(list: list),
+      PersistentGroceriesList() => PersistentGroceriesListDetail(list: list),
+    };
   }
 }
