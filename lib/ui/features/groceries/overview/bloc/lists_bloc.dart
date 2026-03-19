@@ -13,13 +13,10 @@ class ListsBloc extends Bloc<ListsEvent, ListsState> {
   ListsBloc() : super(initialListsState) {
     on<ListsEvent>(
       (event, emit) async => switch (event) {
-        FetchListsEvent() => await Future.delayed(
-          simDuration,
-          () => emit(
-            state.copyWith(
-              lists: GroceriesListRepositoryMock.instance.lists,
-              isLoading: false,
-            ),
+        FetchListsEvent() => emit(
+          state.copyWith(
+            lists: await GroceriesListRepositoryMock.instance.getAll(),
+            isLoading: false,
           ),
         ),
         FilterChangedEvent() => emit(
@@ -31,23 +28,24 @@ class ListsBloc extends Bloc<ListsEvent, ListsState> {
           GroceriesListRepositoryMock.instance.remove(event.list),
 
           emit(
-            state.copyWith(lists: GroceriesListRepositoryMock.instance.lists),
+            state.copyWith(
+              lists: await GroceriesListRepositoryMock.instance.getAll(),
+            ),
           ),
         },
-        CreateListEvent() => await Future.delayed(simDuration, () {
-          GroceriesListRepositoryMock.instance.add(
-            GroceriesList.create(event.type, name: event.name),
-          );
+        CreateListEvent() => () async {
+          if (event.name.isNotEmpty) {
+            await GroceriesListRepositoryMock.instance.add(
+              GroceriesList.create(event.type, name: event.name),
+            );
 
-          return emit(
-            event.name.isNotEmpty
-                ? state.copyWith(
-                    lists: GroceriesListRepositoryMock.instance.lists,
-                    isLoading: false,
-                  )
-                : state.copyWith(isLoading: false),
-          );
-        }),
+            final lists = await GroceriesListRepositoryMock.instance.getAll();
+
+            emit(state.copyWith(lists: lists, isLoading: false));
+          } else {
+            emit(state.copyWith(isLoading: false));
+          }
+        }(),
         SortablePropertyChangedEvent() => emit(
           state.copyWith(
             prop: event.prop,

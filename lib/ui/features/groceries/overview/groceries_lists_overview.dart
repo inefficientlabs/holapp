@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:holapp/config/config.dart';
 import 'package:holapp/domain/models/groceries/list/groceries_list.dart';
 import 'package:holapp/routing/hol_go_router.dart';
+import 'package:holapp/ui/core/ui/hol_appbar.dart';
 import 'package:holapp/ui/features/groceries/create_dialog/create_dialog.dart';
 import 'package:holapp/ui/features/groceries/overview/bloc/lists_bloc.dart';
 import 'package:holapp/ui/features/groceries/overview/bloc/lists_event.dart';
@@ -50,19 +51,11 @@ class GroceriesListsOverview extends StatelessWidget {
                 ? Center(child: const CircularProgressIndicator(size: 40))
                 : Column(
                     children: [
-                      AppBar(
-                        child: Row(
-                          children: [
-                            SizedBox(width: 48),
-                            Expanded(child: Center(child: Text("Overview"))),
-                            GhostButton(
-                              child: Icon(LucideIcons.settings),
-                              onPressed: () {
-                                context.go(Routes.settings);
-                              },
-                            ),
-                          ],
-                        ),
+                      HolAppbar(
+                        label: "Overview",
+                        backRoute: null,
+                        displaySettingsButton: true,
+                        settingsArgs: SettingsArgs(from: Routes.overview),
                       ),
                       Expanded(
                         child: ListView.separated(
@@ -72,7 +65,7 @@ class GroceriesListsOverview extends StatelessWidget {
                               final list = filtered[index];
                               return GestureDetector(
                                 onTap: () {
-                                  context.go("/detail/${list.id.id}");
+                                  context.go(Routes.detailId(list.id));
                                 },
                                 child: toCard(list),
                               );

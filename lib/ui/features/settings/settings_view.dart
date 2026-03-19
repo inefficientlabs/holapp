@@ -1,11 +1,13 @@
 import 'package:holapp/config/config.dart';
-import 'package:holapp/routing/hol_go_router.dart';
+import 'package:holapp/ui/core/ui/hol_appbar.dart';
 import 'package:holapp/ui/features/settings/settings_provider.dart';
 import 'package:holapp/utils/theme_mode.dart';
 import 'package:shadcn_flutter/shadcn_flutter.dart';
 
 class SettingsView extends StatelessWidget {
-  const SettingsView({super.key});
+  final String fromRoute;
+
+  const SettingsView({super.key, required this.fromRoute});
 
   @override
   Widget build(BuildContext context) {
@@ -16,22 +18,11 @@ class SettingsView extends StatelessWidget {
         padding: Config.insetLeftRightBottom,
         child: Column(
           children: [
-            AppBar(
-              child: Row(
-                children: [
-                  SizedBox(
-                    width: 48,
-                    child: GhostButton(
-                      onPressed: () {
-                        router.go(Routes.overview);
-                      },
-                      child: Icon(LucideIcons.arrowLeft),
-                    ),
-                  ),
-                  Expanded(child: Center(child: Text("Settings"))),
-                  SizedBox(width: 48),
-                ],
-              ),
+            HolAppbar(
+              backRoute: fromRoute,
+              displaySettingsButton: false,
+              label: "Settings",
+              settingsArgs: null,
             ),
             Row(
               children: [

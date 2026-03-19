@@ -17,17 +17,19 @@ class GroceriesListRepositoryMock {
     ),
   ];
 
-  List<GroceriesList> get lists => List.unmodifiable(_lists);
+  Future<List<GroceriesList>> getAll() async {
+    return List.unmodifiable(_lists);
+  }
 
-  void add(GroceriesList list) {
+  Future<void> add(GroceriesList list) async {
     _lists.add(list);
   }
 
-  void remove(GroceriesList list) {
+  Future<void> remove(GroceriesList list) async {
     _lists.remove(list);
   }
 
-  GroceriesList? findByIdOrNull(Id id) {
+  Future<GroceriesList?> findByIdOrNull(Id id) async {
     return _lists.firstWhere((it) => it.id == id);
   }
 }

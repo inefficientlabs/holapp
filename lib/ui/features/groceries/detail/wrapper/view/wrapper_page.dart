@@ -23,9 +23,11 @@ class WrapperPage extends StatelessWidget {
       child: BlocBuilder<WrapperBloc, WrapperState>(
         builder: (context, state) {
           return Scaffold(
-            child: switch (state.isLoading) {
-              true => const Center(child: CircularProgressIndicator(size: 40)),
-              false => loadingFinished(context, state.list),
+            child: switch (state) {
+              Loading() => const Center(
+                child: CircularProgressIndicator(size: 40),
+              ),
+              Finished() => loadingFinished(context, state.list),
             },
           );
         },

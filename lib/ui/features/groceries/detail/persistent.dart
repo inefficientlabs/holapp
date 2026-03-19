@@ -1,6 +1,7 @@
 import 'package:holapp/config/config.dart';
 import 'package:holapp/domain/models/groceries/list/groceries_list.dart';
 import 'package:holapp/routing/hol_go_router.dart';
+import 'package:holapp/ui/core/ui/hol_appbar.dart';
 import 'package:shadcn_flutter/shadcn_flutter.dart';
 
 class PersistentGroceriesListDetail extends StatelessWidget {
@@ -15,24 +16,11 @@ class PersistentGroceriesListDetail extends StatelessWidget {
         padding: Config.insetLeftRightBottom,
         child: Column(
           children: [
-            AppBar(
-              child: Row(
-                children: [
-                  GhostButton(
-                    child: Icon(LucideIcons.arrowLeft),
-                    onPressed: () {
-                      router.go(Routes.overview);
-                    },
-                  ),
-                  Expanded(child: Center(child: Text(list.name))),
-                  GhostButton(
-                    onPressed: () {
-                      router.go(Routes.settings);
-                    },
-                    child: Icon(LucideIcons.settings),
-                  ),
-                ],
-              ),
+            HolAppbar(
+              backRoute: Routes.overview,
+              displaySettingsButton: true,
+              label: list.name,
+              settingsArgs: SettingsArgs(from: Routes.detailId(list.id)),
             ),
             Text(list.date.toString()),
           ],
