@@ -5,8 +5,6 @@ import 'wrapper_event.dart';
 import 'wrapper_state.dart';
 
 class WrapperBloc extends Bloc<WrapperEvent, WrapperState> {
-  final Duration simDuration = Duration(milliseconds: 250);
-
   WrapperBloc() : super(Loading()) {
     on<WrapperEvent>(
       (event, emit) async => switch (event) {

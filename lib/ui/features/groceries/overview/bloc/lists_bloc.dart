@@ -8,8 +8,6 @@ import 'lists_state.dart';
 
 // basically der reducer
 class ListsBloc extends Bloc<ListsEvent, ListsState> {
-  final Duration simDuration = Duration(milliseconds: 250);
-
   ListsBloc() : super(initialListsState) {
     on<ListsEvent>(
       (event, emit) async => switch (event) {
