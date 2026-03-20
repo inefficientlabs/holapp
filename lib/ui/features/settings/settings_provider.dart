@@ -13,8 +13,11 @@ class SettingsProvider extends InheritedNotifier<SettingsController> {
     final provider = context
         .dependOnInheritedWidgetOfExactType<SettingsProvider>();
 
-    assert(provider != null, 'No SettingsProvider found in context');
-
-    return provider!.notifier!;
+    return switch (provider?.notifier) {
+      SettingsController controller => controller,
+      null => throw Exception(
+        'No SettingsProvider or SettingsController found in context',
+      ),
+    };
   }
 }
