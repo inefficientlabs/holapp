@@ -22,7 +22,7 @@ class HolAppbar extends StatelessWidget {
       child: Row(
         children: [
           SizedBox(
-            width: 48,
+            width: 52,
             child: switch (backRoute) {
               String route => GhostButton(
                 onPressed: () {
@@ -35,7 +35,7 @@ class HolAppbar extends StatelessWidget {
           ),
           Expanded(child: Center(child: Text(label))),
           SizedBox(
-            width: 48,
+            width: 52,
             child: displaySettingsButton
                 ? GhostButton(
                     onPressed: () {
