@@ -33,7 +33,18 @@ class HolAppbar extends StatelessWidget {
               null => null,
             },
           ),
-          Expanded(child: Center(child: Text(label))),
+          Expanded(
+            child: Center(
+              child: Text(
+                label,
+                style: TextStyle(
+                  fontFamily: 'VT323',
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
           SizedBox(
             width: 52,
             child: displaySettingsButton
