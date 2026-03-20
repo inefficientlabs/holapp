@@ -10,7 +10,6 @@ import 'package:holapp/ui/features/groceries/overview/bloc/lists_bloc.dart';
 import 'package:holapp/ui/features/groceries/overview/bloc/lists_event.dart';
 import 'package:holapp/ui/features/groceries/overview/bloc/lists_state.dart';
 import 'package:holapp/utils/filter.dart';
-import 'package:holapp/utils/sort.dart';
 import 'package:shadcn_flutter/shadcn_flutter.dart';
 
 class GroceriesListsOverview extends StatefulWidget {
