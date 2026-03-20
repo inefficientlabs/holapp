@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:go_router/go_router.dart';
 import 'package:holapp/domain/models/common/id.dart';
 import 'package:holapp/ui/features/groceries/detail/wrapper/view/wrapper_page.dart';
@@ -12,6 +10,16 @@ class SettingsArgs {
   SettingsArgs({required this.from});
 }
 
+class PathParameterNotFoundException implements Exception {
+  final String path;
+  final String parameter;
+
+  @override
+  String toString() => '';
+
+  PathParameterNotFoundException({required this.path, required this.parameter});
+}
+
 final GoRouter router = GoRouter(
   routes: [
     GoRoute(
@@ -21,8 +29,14 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: Routes.detail,
       builder: (context, state) {
+        const String parameter = 'id';
+
         final pathId =
-            state.pathParameters['id'] ?? (throw PathNotFoundException);
+            state.pathParameters[parameter] ??
+            (throw PathParameterNotFoundException(
+              path: Routes.detail,
+              parameter: parameter,
+            ));
 
         return GroceriesListWrapperPage(id: Id(id: pathId));
       },
