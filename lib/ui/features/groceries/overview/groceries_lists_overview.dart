@@ -62,46 +62,15 @@ class _GroceriesListsOverview extends State<GroceriesListsOverview> {
                         ),
                         Expanded(
                           child: ListView.separated(
-                            itemCount: filtered.length + 1,
+                            itemCount: filtered.length,
                             itemBuilder: (context, index) {
-                              if (index < filtered.length) {
-                                final list = filtered[index];
-                                return GestureDetector(
-                                  onTap: () {
-                                    context.go(Routes.detailId(list.id));
-                                  },
-                                  child: toCard(list),
-                                );
-                              } else {
-                                return Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    vertical: 8,
-                                  ),
-                                  child: PrimaryButton(
-                                    onPressed: () async {
-                                      var result =
-                                          await showDialog<
-                                            CreateListDialogData
-                                          >(
-                                            context: context,
-                                            builder: (_) => CreateListDialog(),
-                                          );
-                                      if (result != null) {
-                                        bloc.add(
-                                          SetLoadingEvent(isLoading: true),
-                                        );
-                                        bloc.add(
-                                          CreateListEvent(
-                                            name: result.name,
-                                            type: result.type,
-                                          ),
-                                        );
-                                      }
-                                    },
-                                    child: const Icon(Icons.add, size: 24),
-                                  ),
-                                );
-                              }
+                              final list = filtered[index];
+                              return GestureDetector(
+                                onTap: () {
+                                  context.go(Routes.detailId(list.id));
+                                },
+                                child: toCard(list),
+                              );
                             },
                             separatorBuilder: (context, index) =>
                                 const SizedBox(height: 4),
@@ -109,76 +78,6 @@ class _GroceriesListsOverview extends State<GroceriesListsOverview> {
                         ),
                         Column(
                           children: [
-                            SizedBox(height: 4),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: Select<GroceriesListSortableProperty>(
-                                    itemBuilder: (context, item) =>
-                                        Text(item.displayName()),
-                                    onChanged: (value) {
-                                      if (value != null) {
-                                        bloc.add(
-                                          SortablePropertyChangedEvent(
-                                            prop: value,
-                                          ),
-                                        );
-                                      }
-                                    },
-                                    value: state.prop,
-                                    placeholder: const Text(
-                                      'Select a property',
-                                    ),
-                                    popup: SelectPopup(
-                                      items: SelectItemList(
-                                        children: GroceriesListSortableProperty
-                                            .values
-                                            .map(
-                                              (type) => SelectItemButton(
-                                                value: type,
-                                                child: Text(type.displayName()),
-                                              ),
-                                            )
-                                            .toList(),
-                                      ),
-                                    ).call,
-                                  ),
-                                ),
-                                const SizedBox(width: 4),
-                                Expanded(
-                                  child: Select<SortDirection>(
-                                    itemBuilder: (context, item) => item.icon(),
-                                    onChanged: (direction) {
-                                      if (direction != null) {
-                                        bloc.add(
-                                          SortDirectionChangedEvent(
-                                            direction: direction,
-                                          ),
-                                        );
-                                      }
-                                    },
-                                    value: state.sort.direction,
-                                    placeholder: state.sort.direction.icon(),
-                                    popup: SelectPopup(
-                                      items: SelectItemList(
-                                        children:
-                                            [
-                                                  SortDirection.ascending,
-                                                  SortDirection.descending,
-                                                ]
-                                                .map(
-                                                  (type) => SelectItemButton(
-                                                    value: type,
-                                                    child: type.icon(),
-                                                  ),
-                                                )
-                                                .toList(),
-                                      ),
-                                    ).call,
-                                  ),
-                                ),
-                              ],
-                            ),
                             SizedBox(height: 4),
                             Row(
                               children: [
@@ -224,6 +123,39 @@ class _GroceriesListsOverview extends State<GroceriesListsOverview> {
                                   ),
                                 ),
                               ],
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 8),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: PrimaryButton(
+                                      onPressed: () async {
+                                        var result =
+                                            await showDialog<
+                                              CreateListDialogData
+                                            >(
+                                              context: context,
+                                              builder: (_) =>
+                                                  CreateListDialog(),
+                                            );
+                                        if (result != null) {
+                                          bloc.add(
+                                            SetLoadingEvent(isLoading: true),
+                                          );
+                                          bloc.add(
+                                            CreateListEvent(
+                                              name: result.name,
+                                              type: result.type,
+                                            ),
+                                          );
+                                        }
+                                      },
+                                      child: const Icon(Icons.add, size: 24),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ],
                         ),
