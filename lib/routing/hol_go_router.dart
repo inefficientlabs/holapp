@@ -24,7 +24,7 @@ final GoRouter router = GoRouter(
         final pathId =
             state.pathParameters['id'] ?? (throw PathNotFoundException);
 
-        return WrapperPage(id: Id(id: pathId));
+        return GroceriesListWrapperPage(id: Id(id: pathId));
       },
     ),
     GoRoute(

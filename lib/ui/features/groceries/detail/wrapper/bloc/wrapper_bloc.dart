@@ -4,9 +4,10 @@ import 'package:holapp/data/repositories/groceries_lists_repository_mock.dart';
 import 'wrapper_event.dart';
 import 'wrapper_state.dart';
 
-class WrapperBloc extends Bloc<WrapperEvent, WrapperState> {
-  WrapperBloc() : super(Loading()) {
-    on<WrapperEvent>(
+class GroceriesListWrapperBloc
+    extends Bloc<GroceriesListWrapperEvent, GroceriesListWrapperState> {
+  GroceriesListWrapperBloc() : super(Loading()) {
+    on<GroceriesListWrapperEvent>(
       (event, emit) async => switch (event) {
         GetGroceriesListByIdEvent() => emit(
           Finished(

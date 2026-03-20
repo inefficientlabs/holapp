@@ -11,16 +11,17 @@ import 'package:shadcn_flutter/shadcn_flutter_experimental.dart';
 import '../bloc/wrapper_bloc.dart';
 import '../bloc/wrapper_event.dart';
 
-class WrapperPage extends StatelessWidget {
+class GroceriesListWrapperPage extends StatelessWidget {
   final Id id;
 
-  const WrapperPage({super.key, required this.id});
+  const GroceriesListWrapperPage({super.key, required this.id});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => WrapperBloc()..add(GetGroceriesListByIdEvent(id: id)),
-      child: BlocBuilder<WrapperBloc, WrapperState>(
+      create: (_) =>
+          GroceriesListWrapperBloc()..add(GetGroceriesListByIdEvent(id: id)),
+      child: BlocBuilder<GroceriesListWrapperBloc, GroceriesListWrapperState>(
         builder: (context, state) {
           return Scaffold(
             child: switch (state) {

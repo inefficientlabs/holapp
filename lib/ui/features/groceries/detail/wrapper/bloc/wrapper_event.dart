@@ -1,10 +1,8 @@
 import 'package:holapp/domain/models/common/id.dart';
 
-sealed class WrapperEvent {
-  const WrapperEvent();
-}
+sealed class GroceriesListWrapperEvent {}
 
-class GetGroceriesListByIdEvent extends WrapperEvent {
+class GetGroceriesListByIdEvent extends GroceriesListWrapperEvent {
   Id id;
 
   GetGroceriesListByIdEvent({required this.id});
