@@ -27,6 +27,13 @@ class _CreateListDialog extends State<CreateListDialog> {
   final Debouncer _debouncer = Debouncer();
 
   @override
+  void dispose() {
+    _listNameController.dispose();
+    _listTypeController.dispose();
+    super.dispose();
+  }
+
+  @override
   void initState() {
     super.initState();
     _listTypeController.value = PersistentGroceriesList;

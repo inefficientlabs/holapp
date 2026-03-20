@@ -22,15 +22,12 @@ class ListsBloc extends Bloc<ListsEvent, ListsState> {
             filter: event.filter.isEmpty ? null : Filter(str: event.filter),
           ),
         ),
-        DeleteListEvent() => {
-          GroceriesListRepositoryMock.instance.remove(event.list),
+        DeleteListEvent() => () async {
+          await GroceriesListRepositoryMock.instance.remove(event.list);
+          var lists = await GroceriesListRepositoryMock.instance.getAll();
 
-          emit(
-            state.copyWith(
-              lists: await GroceriesListRepositoryMock.instance.getAll(),
-            ),
-          ),
-        },
+          emit(state.copyWith(lists: lists));
+        }(),
         CreateListEvent() => () async {
           if (event.name.isNotEmpty) {
             await GroceriesListRepositoryMock.instance.add(
