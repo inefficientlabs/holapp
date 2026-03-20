@@ -10,7 +10,6 @@ class SettingsController with ChangeNotifier {
   Future<void> loadSettings() async {
     _themeMode = ThemeMode.system;
 
-    // Important! Inform listeners a change has occurred.
     notifyListeners();
   }
 
