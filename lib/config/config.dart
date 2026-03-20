@@ -5,7 +5,7 @@ class Config {
 
   static const debounceDuration = Duration(milliseconds: 234);
 
-  static const double _inset = 10;
+  static const double _inset = 8;
   static const insetLeftRightBottom = EdgeInsets.only(
     left: _inset,
     right: _inset,

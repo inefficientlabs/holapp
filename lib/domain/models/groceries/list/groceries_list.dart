@@ -1,5 +1,6 @@
 import 'package:holapp/domain/models/common/id.dart';
 import 'package:holapp/domain/models/groceries/item/groceries_item.dart';
+import 'package:shadcn_flutter/shadcn_flutter_experimental.dart';
 
 typedef GroceriesListFactory = GroceriesList Function({required String name});
 
@@ -8,11 +9,12 @@ sealed class GroceriesList {
   late String name;
   late DateTime date;
   late List<GroceriesItem> groceries;
+  late IconData icon;
 
   static final Map<Type, GroceriesListFactory> _registry = {};
 
-  static void register(Type type, GroceriesListFactory factory) {
-    _registry[type] = factory;
+  static void register(Type type, GroceriesListFactory groceriesListFactory) {
+    _registry[type] = groceriesListFactory;
   }
 
   static List<Type> get types => _registry.keys.toList();
@@ -52,6 +54,9 @@ class DisposableGroceriesList extends GroceriesList {
   List<GroceriesItem> groceries = [];
 
   @override
+  IconData icon = LucideIcons.list;
+
+  @override
   String name;
 
   DisposableGroceriesList({
@@ -59,12 +64,12 @@ class DisposableGroceriesList extends GroceriesList {
     required this.name,
     required this.date,
     required this.groceries,
+    required this.icon,
   });
 
   DisposableGroceriesList.init({required this.name}) {
     id = Id.init();
-    date = DateTime.now();
-    groceries = [];
+    icon = LucideIcons.list;
   }
 
   static void register() {
@@ -86,6 +91,9 @@ class PersistentGroceriesList extends GroceriesList {
   List<GroceriesItem> groceries = [];
 
   @override
+  IconData icon = LucideIcons.list;
+
+  @override
   String name;
 
   List<GroceriesItem> history = [];
@@ -99,8 +107,6 @@ class PersistentGroceriesList extends GroceriesList {
 
   PersistentGroceriesList.init({required this.name}) {
     id = Id.init();
-    date = DateTime.now();
-    groceries = [];
   }
 
   static void register() {

@@ -238,82 +238,79 @@ class _GroceriesListsOverview extends State<GroceriesListsOverview> {
 
   Card toCard(GroceriesList list) {
     return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(2),
-        child: Row(
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    list.name,
-                    style: const TextStyle(fontSize: 18),
-                  ).semiBold(),
+      child: Row(
+        children: [
+          Icon(list.icon),
+          SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  list.name,
+                  style: const TextStyle(fontSize: 18),
+                ).semiBold(),
 
-                  const SizedBox(height: 4),
+                const SizedBox(height: 4),
 
-                  Text(list.runtimeType.toString()).muted(),
-                ],
-              ),
+                Text(list.runtimeType.toString()).muted(),
+              ],
             ),
+          ),
 
-            const SizedBox(width: 4),
+          const SizedBox(width: 4),
 
-            Builder(
-              builder: (context) {
-                return GhostButton(
-                  onPressed: () {
-                    final bloc = context.read<ListsBloc>();
+          Builder(
+            builder: (context) {
+              return GhostButton(
+                onPressed: () {
+                  final bloc = context.read<ListsBloc>();
 
-                    showDropdown(
-                      context: context,
-                      builder: (context) {
-                        return DropdownMenu(
-                          children: [
-                            MenuButton(child: Text('Edit')),
-                            MenuButton(
-                              child: Text('Delete'),
-                              onPressed: (_) => showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return AlertDialog(
-                                    title: Text('Delete ${list.name}'),
-                                    content: Row(
-                                      children: [
-                                        Text('User discretion advised'),
-                                      ],
+                  showDropdown(
+                    context: context,
+                    builder: (context) {
+                      return DropdownMenu(
+                        children: [
+                          MenuButton(child: Text('Edit')),
+                          MenuButton(
+                            child: Text('Delete'),
+                            onPressed: (_) => showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  title: Text('Delete ${list.name}'),
+                                  content: Row(
+                                    children: [Text('User discretion advised')],
+                                  ),
+                                  actions: [
+                                    OutlineButton(
+                                      child: const Text('Cancel'),
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
                                     ),
-                                    actions: [
-                                      OutlineButton(
-                                        child: const Text('Cancel'),
-                                        onPressed: () {
-                                          Navigator.pop(context);
-                                        },
-                                      ),
-                                      DestructiveButton(
-                                        child: Icon(LucideIcons.trash),
-                                        onPressed: () {
-                                          bloc.add(DeleteListEvent(list: list));
-                                          Navigator.pop(context);
-                                        },
-                                      ),
-                                    ],
-                                  );
-                                },
-                              ),
+                                    DestructiveButton(
+                                      child: Icon(LucideIcons.trash),
+                                      onPressed: () {
+                                        bloc.add(DeleteListEvent(list: list));
+                                        Navigator.pop(context);
+                                      },
+                                    ),
+                                  ],
+                                );
+                              },
                             ),
-                          ],
-                        );
-                      },
-                    );
-                  },
-                  child: const Icon(LucideIcons.menu),
-                );
-              },
-            ),
-          ],
-        ),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+                child: const Icon(LucideIcons.menu),
+              );
+            },
+          ),
+        ],
       ),
     );
   }
