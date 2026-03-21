@@ -1,19 +1,20 @@
-import 'package:go_router/go_router.dart';
 import 'package:holapp/routing/hol_go_router.dart';
+import 'package:holapp/ui/core/ui/show_overlay.dart';
+import 'package:holapp/ui/features/settings/settings_view.dart';
 import 'package:shadcn_flutter/shadcn_flutter_experimental.dart';
 
 class HolAppbar extends StatelessWidget {
   final SettingsArgs? settingsArgs;
-  final String? backRoute;
   final String label;
   final bool displaySettingsButton;
+  final VoidCallback? onBack;
 
   const HolAppbar({
     super.key,
-    required this.backRoute,
     required this.displaySettingsButton,
     required this.label,
     required this.settingsArgs,
+    required this.onBack,
   });
 
   @override
@@ -23,13 +24,12 @@ class HolAppbar extends StatelessWidget {
         children: [
           SizedBox(
             width: 52,
-            child: switch (backRoute) {
-              String route => GhostButton(
-                onPressed: () {
-                  context.go(route);
-                },
-                child: Icon(LucideIcons.arrowLeft),
+            child: switch (onBack) {
+              void Function() onBack => GhostButton(
+                onPressed: onBack,
+                child: Icon(LucideIcons.x),
               ),
+
               null => null,
             },
           ),
@@ -50,7 +50,9 @@ class HolAppbar extends StatelessWidget {
             child: displaySettingsButton
                 ? GhostButton(
                     onPressed: () {
-                      context.go(Routes.settings, extra: settingsArgs);
+                      if (settingsArgs != null) {
+                        showOverlay(context, SettingsView());
+                      }
                     },
                     child: Icon(LucideIcons.settings),
                   )

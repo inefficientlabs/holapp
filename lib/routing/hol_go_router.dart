@@ -44,14 +44,7 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: Routes.settings,
       builder: (context, state) {
-        final SettingsArgs? args = state.extra as SettingsArgs?;
-
-        return switch (args) {
-          SettingsArgs settingsArgs => SettingsView(
-            fromRoute: settingsArgs.from,
-          ),
-          null => SettingsView(fromRoute: Routes.overview),
-        };
+        return SettingsView();
       },
     ),
   ],

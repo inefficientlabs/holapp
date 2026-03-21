@@ -1,11 +1,12 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_debouncer/flutter_debouncer.dart';
-import 'package:go_router/go_router.dart';
 import 'package:holapp/config/config.dart';
 import 'package:holapp/domain/models/groceries/list/groceries_list.dart';
 import 'package:holapp/routing/hol_go_router.dart';
 import 'package:holapp/ui/core/ui/hol_appbar.dart';
+import 'package:holapp/ui/core/ui/show_overlay.dart';
 import 'package:holapp/ui/features/groceries/create_dialog/create_dialog.dart';
+import 'package:holapp/ui/features/groceries/detail/wrapper/view/wrapper_page.dart';
 import 'package:holapp/ui/features/groceries/overview/bloc/lists_bloc.dart';
 import 'package:holapp/ui/features/groceries/overview/bloc/lists_event.dart';
 import 'package:holapp/ui/features/groceries/overview/bloc/lists_state.dart';
@@ -55,9 +56,9 @@ class _GroceriesListsOverview extends State<GroceriesListsOverview> {
                       children: [
                         HolAppbar(
                           label: "Overview",
-                          backRoute: null,
                           displaySettingsButton: true,
                           settingsArgs: SettingsArgs(from: Routes.overview),
+                          onBack: null,
                         ),
                         Expanded(
                           child: ListView.separated(
@@ -66,7 +67,10 @@ class _GroceriesListsOverview extends State<GroceriesListsOverview> {
                               final list = filtered[index];
                               return GestureDetector(
                                 onTap: () {
-                                  context.go(Routes.detailId(list.id));
+                                  showOverlay(
+                                    context,
+                                    GroceriesListWrapperPage(id: list.id),
+                                  );
                                 },
                                 child: toCard(list),
                               );

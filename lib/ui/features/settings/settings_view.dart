@@ -5,9 +5,7 @@ import 'package:holapp/utils/theme_mode.dart';
 import 'package:shadcn_flutter/shadcn_flutter.dart';
 
 class SettingsView extends StatelessWidget {
-  final String fromRoute;
-
-  const SettingsView({super.key, required this.fromRoute});
+  const SettingsView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +17,7 @@ class SettingsView extends StatelessWidget {
         child: Column(
           children: [
             HolAppbar(
-              backRoute: fromRoute,
+              onBack: () => Navigator.pop(context),
               displaySettingsButton: false,
               label: "Settings",
               settingsArgs: null,

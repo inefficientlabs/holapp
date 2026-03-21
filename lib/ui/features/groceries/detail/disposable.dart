@@ -17,7 +17,7 @@ class DisposableGroceriesListDetail extends StatelessWidget {
         child: Column(
           children: [
             HolAppbar(
-              backRoute: Routes.overview,
+              onBack: () => Navigator.pop(context),
               displaySettingsButton: true,
               label: list.name,
               settingsArgs: SettingsArgs(from: Routes.detailId(list.id)),
