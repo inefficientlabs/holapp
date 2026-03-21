@@ -54,7 +54,7 @@ class HolAppbar extends StatelessWidget {
                         showOverlay(context, SettingsView());
                       }
                     },
-                    child: Icon(LucideIcons.settings),
+                    child: Icon(LucideIcons.settings2),
                   )
                 : null,
           ),

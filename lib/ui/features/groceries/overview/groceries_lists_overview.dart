@@ -241,7 +241,7 @@ class _GroceriesListsOverview extends State<GroceriesListsOverview> {
                     },
                   );
                 },
-                child: const Icon(LucideIcons.menu),
+                child: const Icon(LucideIcons.pen, size: 16),
               );
             },
           ),

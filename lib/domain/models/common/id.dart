@@ -15,7 +15,7 @@ class Id {
 
   @override
   bool operator ==(Object other) {
-    if (identical(this, other)) return true; // same instance
-    return other is Id && other.id == id; // compare id strings
+    if (identical(this, other)) return true;
+    return other is Id && other.id == id;
   }
 }
